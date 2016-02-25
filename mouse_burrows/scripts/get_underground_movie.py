@@ -16,7 +16,7 @@ script_path = os.path.split(os.path.realpath(__file__))[0]
 package_path = os.path.abspath(os.path.join(script_path, '..', '..', '..'))
 sys.path.append(package_path)
 
-from projects.mouse_burrows.scripts.functions.underground_movie import \
+from mouse_burrows.scripts.functions.underground_movie import \
                                                         make_underground_video
 
 

@@ -13,7 +13,7 @@ from collections import OrderedDict
 
 import grip
 
-from projects.mouse_burrows.algorithm.parameters import PARAMETER_LIST, UNIT
+from mouse_burrows.algorithm.parameters import PARAMETER_LIST, UNIT
 from utils.data_structures import DictXpath
 
 

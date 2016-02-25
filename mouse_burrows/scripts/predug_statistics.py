@@ -23,7 +23,7 @@ script_path = os.path.split(os.path.realpath(__file__))[0]
 video_analysis_path = os.path.join(script_path, '..', '..', '..')
 sys.path.append(video_analysis_path)
 
-from projects.mouse_burrows.simple import load_result_file
+from mouse_burrows.simple import load_result_file
 from video import debug
 
 

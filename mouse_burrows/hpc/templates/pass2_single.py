@@ -3,13 +3,12 @@
 from __future__ import division
 
 import sys
-import os
 import logging
-sys.path.append(os.path.expanduser("{FOLDER_CODE}"))
+{ADD_PYTHON_PATHS}  # @UndefinedVariable
 
 from numpy import array  # @UnusedImport
 
-from projects.mouse_burrows.algorithm.pass2 import SecondPass
+from mouse_burrows.algorithm.pass2 import SecondPass
 
 # configure basic logging, which will be overwritten later
 logging.basicConfig()

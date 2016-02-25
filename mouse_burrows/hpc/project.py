@@ -18,7 +18,12 @@ import numpy as np
 from ..algorithm.parameters import PARAMETERS_DEFAULT
 from ..simple import load_result_file
 from utils.data_structures import DictXpath
-from utils.files import MAIN_DIRECTORY
+from utils.files import MAIN_DIRECTORY as VIDEO_ANALYSIS_DIRECTORY
+
+
+
+# get root directory of the project
+PROJECT_DIRECTORY = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 
 
@@ -184,8 +189,21 @@ class HPCProjectBase(object):
         elif 'purge' in prepare_workfolder:
             self.clean_workfolder(purge=True)
         
-        # get the folder in which the current project resides
-        folder_code = os.path.abspath(MAIN_DIRECTORY)
+        # check whether python paths need to be added
+        python_paths = self.parameters['python_paths']
+        if python_paths:
+            paths_str = ', '.join('"' + os.path.expanduser(path) + '"'
+                                  for path in python_paths)
+            add_python_paths = 'sys.path.extend([%s])' % paths_str
+            # get the folder in which the current project resides
+            add_python_paths = add_python_paths.replace(
+                                    '__video_analysis_path__',
+                                    os.path.abspath(VIDEO_ANALYSIS_DIRECTORY))
+            add_python_paths = add_python_paths.replace(
+                                    '__project_path__',
+                                    os.path.abspath(PROJECT_DIRECTORY))
+        else:
+            add_python_paths = ''
         
         # get the temporary directory to which video data should be copied 
         video_folder_temporary = self.parameters['video/folder_temporary']
@@ -206,7 +224,7 @@ class HPCProjectBase(object):
         scale_length = parameters.pop('scale_length', scale_length)
         
         # setup all variables that might be used in the templates
-        params = {'FOLDER_CODE': folder_code,
+        params = {'ADD_PYTHON_PATHS': add_python_paths,
                   'JOB_DIRECTORY': self.folder,
                   'NAME': self.name,
                   'VIDEO_FILE_SOURCE': video_file,

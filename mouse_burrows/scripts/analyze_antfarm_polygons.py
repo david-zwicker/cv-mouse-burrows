@@ -29,7 +29,7 @@ this_path = os.path.dirname(__file__)
 project_path = os.path.join(this_path, '..', '..')
 sys.path.append(project_path)
 
-from projects.mouse_burrows.algorithm.objects import Burrow, GroundProfile
+from mouse_burrows.algorithm.objects import Burrow, GroundProfile
 from video.analysis import curves, image, regions, shapes
 from utils import data_structures, math
 

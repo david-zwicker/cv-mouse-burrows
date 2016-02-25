@@ -3,14 +3,13 @@
 from __future__ import division
 
 import sys
-import os
 import logging
-sys.path.append(os.path.expanduser("{FOLDER_CODE}"))
+{ADD_PYTHON_PATHS}  # @UndefinedVariable
 
 from numpy import array  # @UnusedImport
 
-from projects.mouse_burrows.algorithm.pass3 import ThirdPass
-from projects.mouse_burrows.hpc.project import process_trials
+from mouse_burrows.algorithm.pass3 import ThirdPass
+from mouse_burrows.hpc.project import process_trials
 from video.io.backend_ffmpeg import FFmpegError 
 
 # configure basic logging, which will be overwritten later

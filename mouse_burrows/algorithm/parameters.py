@@ -26,6 +26,7 @@ class UNIT(object):
     BOOLEAN = 6
     INTEGER = 7
     STRING = 8
+    LIST = 9
     LENGTH_PIXEL = 11
     LENGTH_CM = 12
     AREA_PIXEL = 15
@@ -44,6 +45,7 @@ UNIT.parser[UNIT.FACTOR] = float
 UNIT.parser[UNIT.FRACTION] = float
 UNIT.parser[UNIT.BOOLEAN] = bool
 UNIT.parser[UNIT.INTEGER] = int
+UNIT.parser[UNIT.LIST] = list
 UNIT.parser[UNIT.LENGTH_PIXEL] = float
 UNIT.parser[UNIT.LENGTH_CM] = float
 UNIT.parser[UNIT.AREA_PIXEL] = float
@@ -61,6 +63,9 @@ Parameter = namedtuple('Parameter',
 # define all parameters that we support with associated information
 PARAMETER_LIST = [
     # Basic parameters
+    Parameter('python_paths', ['__video_analysis_path__', '__project_path__'],
+              UNIT.LIST,
+              'List of paths that will be appended to the python path.'),
     Parameter('base_folder', '.', UNIT.FOLDER,
               'Base folder in which all files are kept'),
     Parameter('factor_length', 1, UNIT.DEPRECATED, #UNIT.FACTOR,
@@ -133,7 +138,7 @@ PARAMETER_LIST = [
               '[standard python logging levels]'),
             
     # Debug
-    Parameter('debug/output', [], None,
+    Parameter('debug/output', [], UNIT.LIST,
               "List of identifiers determining what debug output is produced. "
               "Supported identifiers include 'video', 'explored_area', "
               "'background', 'difference', 'cage_estimate', 'predug', "
@@ -194,7 +199,8 @@ PARAMETER_LIST = [
     Parameter('cage/boundary_detection_bottom_estimate', 0.95, UNIT.FRACTION,
               'Fraction of the image height that is used to estimate the '
               'position of the bottom of the frame'),
-    Parameter('cage/boundary_detection_thresholds', [0.7, 0.3, 0.7, 0.9], None,
+    Parameter('cage/boundary_detection_thresholds', [0.7, 0.3, 0.7, 0.9],
+              UNIT.LIST,
               'Thresholds for the boundary detection algorithm. The four values '
               'are the fraction of bright pixels necessary to define the '
               'boundary for [left, top, right, bottom], respectively.'),
@@ -306,7 +312,7 @@ PARAMETER_LIST = [
     Parameter('water_bottle/template_height', 60, UNIT.LENGTH_PIXEL,
               'Width of the water bottle template. This will be scaled to the '
               'right dimensions'),                  
-    Parameter('water_bottle/search_region', [0.8, 1., 0., 0.3], None,
+    Parameter('water_bottle/search_region', [0.8, 1., 0., 0.3], UNIT.LIST,
               'Defines the region [x_min, x_max, y_min, y_max] in which the '
               'upper left corner of the water bottle rectangle lies. The '
               'coordinates are given relative to the cage width and height. '
@@ -578,25 +584,24 @@ PARAMETER_LIST = [
 
 
 
-def _test_parameter_consistency():
-    """ test the default values of the parameters """
-    for p in PARAMETER_LIST:
+# test the default values of the parameters
+for p in PARAMETER_LIST:
+    try:
         UNIT.parser[p.unit](p.default_value)
-
-try:        
-    _test_parameter_consistency()
-except ValueError:
-    print('A default value for a parameter was not consistent with the given '
-          'unit.')
-    raise
-
-
+    except:
+        print('The default value for parameter `%s` was not consistent '
+              'with the given unit.' % p.key)
+        raise
+        
 
 # collect all parameters in a convenient dictionary
 PARAMETERS = {p.key: p for p in PARAMETER_LIST}
 # collect the default values of all parameters
 PARAMETERS_DEFAULT = {p.key: p.default_value for p in PARAMETER_LIST
                       if p.unit != UNIT.DEPRECATED}
+
+# clear namespace
+del p
 
 
 

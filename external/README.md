@@ -6,6 +6,3 @@ provided with this module:
 Module                       | License                                      
 -----------------------------|----------
 kids_cache                   | BSD 
-read_imagej                  | MIT   
-simplify_polygon_rdp         | MIT
-simplify_polygon_visvalingam | unknown
