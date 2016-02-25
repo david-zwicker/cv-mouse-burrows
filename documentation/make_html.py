@@ -14,13 +14,13 @@ from collections import OrderedDict
 import grip
 
 from mouse_burrows.algorithm.parameters import PARAMETER_LIST, UNIT
-from utils.data_structures import DictXpath
+from utils.data_structures import NestedDict
 
 
 def create_parameter_summary(outfile):
     """ creates a markdown file summarizing the parameters """
     # load the parameters into a convenient structure
-    parameters = DictXpath(dict_class=OrderedDict)
+    parameters = NestedDict(dict_class=OrderedDict)
     deprecated = {}
     for parameter in PARAMETER_LIST:
         if parameter.unit is UNIT.DEPRECATED:
@@ -37,14 +37,14 @@ def create_parameter_summary(outfile):
         # list all the important parameters
         fp.write('Parameters\n====\n')
         for key1, value1 in parameters.iteritems():
-            if isinstance(value1, DictXpath):
+            if isinstance(value1, NestedDict):
                 # we got a sub category
                 category, subset = key1, value1
                 fp.write("\n%s\n" % category)
                 fp.write("%s\n" % ("-" * len(category)))
 
                 for key2, value2 in subset.iteritems():
-                    if isinstance(value2, DictXpath):
+                    if isinstance(value2, NestedDict):
                         fp.write("* `%s`\n" % key2)
                         for parameter in value2.itervalues():
                             fp.write("  * " + param_line(parameter))

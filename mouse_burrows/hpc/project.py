@@ -17,7 +17,7 @@ import numpy as np
 
 from ..algorithm.parameters import PARAMETERS_DEFAULT
 from ..simple import load_result_file
-from utils.data_structures import DictXpath
+from utils.data_structures import NestedDict
 from utils.files import MAIN_DIRECTORY as VIDEO_ANALYSIS_DIRECTORY
 
 
@@ -92,7 +92,7 @@ class HPCProjectBase(object):
             self.passes = passes
 
         # save tracking parameters
-        self.parameters = DictXpath(PARAMETERS_DEFAULT)
+        self.parameters = NestedDict(PARAMETERS_DEFAULT)
         if parameters is not None:
             self.parameters.from_dict(parameters)
             

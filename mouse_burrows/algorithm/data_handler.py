@@ -22,7 +22,7 @@ except ImportError:
 import objects
 from .parameters import PARAMETERS, PARAMETERS_DEFAULT, UNIT, scale_parameters
 from utils.files import change_directory, ensure_directory_exists
-from utils.data_structures import (DictXpathLazy, LazyHDFValue,
+from utils.data_structures import (LazyNestedDict, LazyHDFValue,
                                    prepare_data_for_yaml)
 from utils.misc import get_loglevel_from_name
 from utils.cache import cached_property
@@ -71,7 +71,7 @@ class DataHandler(object):
 
         # initialize the data handled by this class
         self.video = None
-        self.data = DictXpathLazy()
+        self.data = LazyNestedDict()
         self.data.create_child('parameters')
         self.data['parameters'].from_dict(PARAMETERS_DEFAULT)
         self.parameters_user = parameters #< parameters with higher priority

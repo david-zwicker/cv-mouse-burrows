@@ -633,7 +633,7 @@ def set_base_folder(parameters, folder, include_default=False):
 
 
 def scale_parameters(parameters, factor_length=1, factor_time=1):
-    """ takes a DictXpath dictionary of parameters and scales them according to
+    """ takes a NestedDict dictionary of parameters and scales them according to
     their unit and the given scale factors """
     # scale each parameter in the list
     for key in parameters.iterkeys(flatten=True):
