@@ -1,36 +1,38 @@
-video-analysis
-==============
-This python package contains several modules and packages for doing video analysis with OpenCV and python.
-The package is organized in multiple sub-packages:
+cv-mouse-burrows
+================
 
-<dl>
-<dt>video</dt>
-    <dd>
-    General code that can be used to process videos using python.
-    Special attention has been paid to develop video classes that can be easily
-    used in iterating over video frames, also with multiprocessing support.
-    The sub-package `analysis` contains several modules that contain functions
-    useful for general image or video analysis.
-    
-    Part of the modules have been modified from code from moviepy, which
-    is released under the MIT license at github. The license is included
-    at the end of this file.
-    </dd>
-<dt>utils</dt>
-    <dd>
-    Miscellaneous helper functions and classes.
-    For instance, there are math functions and data structures that are useful
-    for managing caches, heterogeneous output, etc.
-    </dd>
-<dt>projects</dt>
-    <dd>
-    The actual video analysis code for several projects.
-    </dd>
-<dt>external</dt>
-    <dd>
-    Small package that collects modules copied from other authors.
-    </dd>
-</dl>
+This project is about tracking mice during burrowing activities. It analyzes
+the dynamics of the mouse, the ground line, and the actual burrows.
+
+
+Necessary python packages:
+
+Package     | Usage                                      
+------------|-------------------------------------------
+cv2         | OpenCV python bindings for computer vision 
+h5py        | HDF5 python binding for writing out data    
+matplotlib  | Plotting library used for output           
+networkx    | Graph library for graph based tracking
+numpy       | Array library used for manipulating data
+scipy       | Miscellaneous scientific functions
+shapely     | Library for manipulating geometric shapes
+yaml        | YAML binding for writing out data
+
+
+Optional python packages that can be installed via pip:
+
+Package      | Usage                                      
+-------------|-------------------------------------------
+dateutil     | Being less picky about date formats
+descartes    | Debug plotting of shapes
+faulthandler | Detecting low level crashes
+grip         | Converting markdown to html 
+pandas       | Writing results to csv files
+pint         | Reporting results with physical units
+sharedmem    | Showing the videos in a separate process while iterating
+thinning     | package for thinning binary images
+tqdm         | Showing a progress bar while iterating
+
 
 
 The MIT License (MIT) [OSI Approved License]

@@ -26,8 +26,8 @@ import pint
 
 # add the root of the video-analysis project to the path
 this_path = os.path.dirname(__file__)
-video_analysis_path = os.path.join(this_path, '..', '..')
-sys.path.append(video_analysis_path)
+project_path = os.path.join(this_path, '..', '..')
+sys.path.append(project_path)
 
 from projects.mouse_burrows.algorithm.objects import Burrow, GroundProfile
 from video.analysis import curves, image, regions, shapes
