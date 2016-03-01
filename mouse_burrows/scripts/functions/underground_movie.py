@@ -22,7 +22,8 @@ from utils.misc import display_progress
 
 
 def make_underground_video(result_file, output_video=None, display='time',
-                           scale_bar=True, min_duration=60, blank_duration=5):
+                           scale_bar=True, min_duration=60, blank_duration=5,
+                           bouts_slice=slice(None, None)):
     """ main routine of the program
     `result_file` is the file where the results from the video analysis are
         stored. This is usually a *.yaml file
@@ -36,6 +37,8 @@ def make_underground_video(result_file, output_video=None, display='time',
         for the bout to be included in the video
     `blank_duration` determines who many white frames are displayed between
         time intervals where the mouse is underground
+    `bouts_slice` is a slice object that determines which bouts are included in
+        the video.
     """
     logging.info('Analyze video `%s`', result_file)
     
@@ -84,7 +87,10 @@ def make_underground_video(result_file, output_video=None, display='time',
     scale_bar_pos = (30 + scale_bar_size_px//2, 30)
 
     # find time periods where the mouse is underground long enough
-    bouts = contiguous_true_regions(mouse_ground_dists < 0) - frame_offset
+    bouts = contiguous_true_regions(mouse_ground_dists > 0) - frame_offset
+    # restrict to the periods that we are interested in
+    bouts = bouts[bouts_slice]
+    
     for start, finish in display_progress(bouts):
         
         duration = finish - start + 1 

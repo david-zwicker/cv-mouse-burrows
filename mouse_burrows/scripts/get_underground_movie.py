@@ -46,6 +46,10 @@ def main():
                              'below ground to include the bout into the video')
     parser.add_argument('-b', '--blank_duration', type=float, default=5,
                         help='number of blank frames inserted inbetween bouts')
+    parser.add_argument('--bout-first', type=int,
+                        help='the first bout to include in the analysis')
+    parser.add_argument('--bout-last', type=int,
+                        help='the last bout to include in the analysis')
     
     # fetch the arguments and build the parameter list
     args = parser.parse_args()
@@ -55,7 +59,8 @@ def main():
                            output_video=args.output_file,
                            display=args.display, scale_bar=args.scale_bar,
                            min_duration=args.min_duration,
-                           blank_duration=args.blank_duration)
+                           blank_duration=args.blank_duration,
+                           bouts=slice(args.bout_first, args.bout_last))
     
 
 
