@@ -271,7 +271,7 @@ class AntfarmShapes(object):
                         # the ground is directly reachable from most points
                         line = None
                 
-                if line:
+                if line is not None:
                     burrow.branches.append(line)
         
         if ground_line:
@@ -440,7 +440,7 @@ class AntfarmShapes(object):
         
         # get the path between the two points in the mask that are farthest
         points = regions.get_farthest_points(mask, ret_path=True)
-        
+
         # build the ground line from this
         ground_line = GroundProfile(points)
         
@@ -602,8 +602,9 @@ class AntfarmShapes(object):
             w_min = self.params['cage/width_min'] * units.cm
             w_max = self.params['cage/width_max'] * units.cm
             if not w_min < len_x_cm < w_max:
-                raise RuntimeError('The length (%s cm) of the ground line is '
-                                   'off.' % len_x_cm)
+                raise RuntimeError('The length (%s) of the ground line is '
+                                   'not in [%s, %s].'
+                                   % (len_x_cm, w_min, w_max))
                 
             result['scale_bar'] = {'length_pixel': self.scale_bar.size,
                                    'cm_per_pixel': cm_per_pixel}

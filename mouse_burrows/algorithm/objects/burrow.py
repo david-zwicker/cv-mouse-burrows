@@ -112,7 +112,7 @@ class Burrow(shapes.Polygon):
         center = self.polygon.centroid
         flags = ['center=(%d, %d)' % (center.x, center.y),
                  'points=%d' % len(self._contour)]
-        if self.length:
+        if self.length >= 0:
             flags.append('length=%d' % self.length)
         else:
             flags.append('area=%d' % self.polygon.area)
