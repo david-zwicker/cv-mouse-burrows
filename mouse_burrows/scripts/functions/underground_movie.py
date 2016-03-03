@@ -60,7 +60,9 @@ def make_underground_video(result_file, output_video=None, display='time',
     
     # create output video
     if output_video is None:
-        output_video = analyzer.get_filename('underground.mov', 'results')
+        movie_ext = analyzer.params['output/video/extension']
+        output_video = analyzer.get_filename('underground' + movie_ext,
+                                             'results')
     
     logging.info('Write output to `%s`', output_video)
     
