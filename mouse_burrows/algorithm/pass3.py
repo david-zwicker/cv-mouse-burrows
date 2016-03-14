@@ -758,8 +758,11 @@ class ThirdPass(PassBase):
         centerline = centerline[::-1]
         
         # add points that might be outside of the burrow contour
-        ground_start = curves.get_projection_point(ground_line, centerline[0]) 
-        centerline.insert(0, ground_start)
+        ground_start = curves.get_projection_point(ground_line, centerline[0])
+        if isinstance(centerline, np.ndarray):
+            centerline = np.insert(centerline, 0, ground_start).reshape(-1, 2)
+        else:
+            centerline.insert(0, ground_start)
             
         # simplify the curve        
         centerline = cv2.approxPolyDP(np.array(centerline, np.int),
