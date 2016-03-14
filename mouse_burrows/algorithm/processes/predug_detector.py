@@ -175,6 +175,12 @@ class PredugDetector(object):
                                         (ground_points[:, 0].max(), y_mid)))
         points = mid_line.intersection(self.ground.linestring)
 
+        if isinstance(points, geometry.Point):
+            logging.warn('The midline intersected the ground line only once. '
+                         'Hence, the ground line does not have the expected '
+                         'shape and we cannot find the predug reliably.')
+            return
+
         if len(points) != 2:
             logging.warn('The ground line crossed its midline not exactly '
                          'twice => The ground line is likely messed up.')
