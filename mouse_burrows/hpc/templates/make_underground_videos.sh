@@ -11,7 +11,7 @@
 #SBATCH --mail-user={NOTIFICATION_EMAIL}
 
 # format task id
-task_id=$(printf "%0*d\n" 2 $SLURM_ARRAY_TASK_ID)
+task_id=$(printf "%0*d" 2 $SLURM_ARRAY_TASK_ID)
 
 echo "Start job number $task_id with id $SLURM_JOB_ID"
 
