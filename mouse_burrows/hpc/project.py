@@ -140,7 +140,8 @@ class HPCProjectBase(object):
 
     @classmethod
     def create(cls, video_file, result_folder, video_name=None,
-               parameters=None, passes=None, prepare_workfolder='auto'):
+               parameters=None, passes=None, prepare_workfolder='auto',
+               **kwargs):
         """ creates a new project from data
         video_file is the filename of the video to scan
         result_folder is a general folder in which the results will be stored.
@@ -172,7 +173,8 @@ class HPCProjectBase(object):
         
         # prepare the project
         project.prepare_project(video_file, result_folder, video_name,
-                                parameters, passes, prepare_workfolder)
+                                parameters, passes, prepare_workfolder,
+                                **kwargs)
         return project
         
         

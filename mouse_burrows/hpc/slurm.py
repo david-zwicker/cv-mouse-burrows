@@ -63,28 +63,32 @@ class ProjectSingleSlurm(HPCProjectBase):
 
     def prepare_project(self, *args, **kwargs):
         """ prepare the work directory by setting up all necessary files """
-        # read job_ids from the designated file
-        job_id_file = os.path.join(self.folder, self.job_ids_file)
-        job_ids = {}
-        try:
-            for line in open(job_id_file):
-                # extract numeric pass id and job id
-                p_id, j_id = line.split('-')
-                p_id = int(p_id.split(' ')[1])
-                if p_id in job_ids:
-                    # this job has been restarted => all previous jobs should
-                    # be finished by now
-                    job_ids = {'p_id': int(j_id)}
-                else:
-                    # add this id to list of jobs that may still be running
-                    job_ids[p_id] = int(j_id)
-        except IOError:
-            pass
-                
-        # cancel the jobs that were found
-        if job_ids:
-            cmd = ['scancel', '-Q'] + [str(i) for i in job_ids.values()]
-            sp.check_call(cmd)
+        # determine whether running jobs should be cancelled
+        cancel_jobs = kwargs.pop('cancel_jobs', True)        
+        
+        if cancel_jobs:
+            # read job_ids from the designated file
+            job_id_file = os.path.join(self.folder, self.job_ids_file)
+            job_ids = {}
+            try:
+                for line in open(job_id_file):
+                    # extract numeric pass id and job id
+                    p_id, j_id = line.split('-')
+                    p_id = int(p_id.split(' ')[1])
+                    if p_id in job_ids:
+                        # this job has been restarted => all previous jobs should
+                        # be finished by now
+                        job_ids = {'p_id': int(j_id)}
+                    else:
+                        # add this id to list of jobs that may still be running
+                        job_ids[p_id] = int(j_id)
+            except IOError:
+                pass
+            
+            # cancel the jobs that were found
+            if job_ids:
+                cmd = ['scancel', '-Q'] + [str(i) for i in job_ids.values()]
+                sp.check_call(cmd)
         
         # add files using 
         super(ProjectSingleSlurm, self).prepare_project(*args, **kwargs)
