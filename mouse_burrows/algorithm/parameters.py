@@ -156,9 +156,16 @@ PARAMETER_LIST = [
               'Folder to which the YAML and HDF5 result files are written'),
     Parameter('output/video/folder', 'results/', UNIT.SUBFOLDER,
               'Folder to which the result video is written'),
+    Parameter('output/video/folder_underground', 'results/underground_video/',
+              UNIT.SUBFOLDER,
+              'Folder to which the underground video is written'),
     Parameter('output/output_period', 1, UNIT.TIME_FRAMES,
               'How often are frames written to the output file or shown on the '
               'screen'),
+    Parameter('output/hdf5_compression', 'gzip', None,
+              'Compression algorithm to be used for the HDF5 data. Possible '
+              'options might be None, "gzip", "lzf", and "szip".'),
+    # Output video
     Parameter('output/video/enabled', True, UNIT.BOOLEAN,
               'Flag determining whether the final video should be produced'),
     Parameter('output/video/extension', '.mov', None,
@@ -167,14 +174,14 @@ PARAMETER_LIST = [
               'ffmpeg video codec used for debug videos'),
     Parameter('output/video/bitrate', '2000k', None,
               'Bitrate used for debug videos'),
-    Parameter('output/hdf5_compression', 'gzip', None,
-              'Compression algorithm to be used for the HDF5 data. Possible '
-              'options might be None, "gzip", "lzf", and "szip".'),
-    # Output video
     Parameter('output/video/period', 100, UNIT.TIME_FRAMES,
               'How often are frames written to the output file'),
     Parameter('output/video/mouse_trail_length', 1000, UNIT.TIME_FRAMES,
-              'How long is the trail indicating the mouse position in the past'),
+              'The length of the trail indicating the mouse position in the '
+              'past'),
+    Parameter('output/video/underground_video_length', 30*60*20, #< 20 min
+              UNIT.TIME_FRAMES,
+              'Typical length of the underground video in number of frames'),
     
     # Cage
     Parameter('cage/width_cm', 85.5, UNIT.LENGTH_CM,

@@ -60,8 +60,10 @@ class DataHandler(object):
     # look up table for where to find folders in the parameter dictionary    
     folder_lut = {'results': 'parameters/output/folder',
                   'video': 'parameters/output/video/folder',
+                  'video_underground': 'parameters/output/video/folder',
                   'logging': 'parameters/logging/folder',
-                  'debug': 'parameters/debug/folder'}
+                  'debug': 'parameters/debug/folder',
+                  }
 
     
     def __init__(self, name='', parameters=None, initialize_parameters=True,

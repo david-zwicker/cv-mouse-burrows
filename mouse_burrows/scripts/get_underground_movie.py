@@ -13,8 +13,11 @@ import os
 
 # add the root of the video-analysis project to the path
 script_path = os.path.split(os.path.realpath(__file__))[0]
-package_path = os.path.abspath(os.path.join(script_path, '..', '..', '..'))
+package_path = os.path.abspath(os.path.join(script_path, '..', '..'))
 sys.path.append(package_path)
+
+video_analysis_path_guess = os.path.join(package_path, '..', 'video-analysis')
+sys.path.append(os.path.abspath(video_analysis_path_guess))
 
 from mouse_burrows.scripts.functions.underground_movie import \
                                                         make_underground_video
@@ -42,14 +45,17 @@ def main():
     parser.add_argument('-s', '--scale_bar', action='store_true', default=False,
                         help='displays a scale bar in the video')
     parser.add_argument('-m', '--min_duration', type=float, default=60,
+                        metavar='FRAMES',
                         help='minimal number of frames the mouse has to be '
                              'below ground to include the bout into the video')
     parser.add_argument('-b', '--blank_duration', type=float, default=5,
-                        help='number of blank frames inserted inbetween bouts')
-    parser.add_argument('--bout-first', type=int,
-                        help='the first bout to include in the analysis')
-    parser.add_argument('--bout-last', type=int,
-                        help='the last bout to include in the analysis')
+                        metavar='FRAMES',
+                        help='number of blank frames inserted between bouts')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--bout-slice', type=int, nargs=2, metavar='IDX',
+                       help='the range of bouts to include in the analysis')
+    group.add_argument('--video_part', type=int, metavar='NR',
+                       help='part of the full video that is created')
     
     # fetch the arguments and build the parameter list
     args = parser.parse_args()
@@ -60,7 +66,8 @@ def main():
                            display=args.display, scale_bar=args.scale_bar,
                            min_duration=args.min_duration,
                            blank_duration=args.blank_duration,
-                           bouts=slice(args.bout_first, args.bout_last))
+                           bouts=slice(*args.bout_slice),
+                           video_part=args.video_part)
     
 
 

@@ -42,12 +42,14 @@ class ProjectSingleSlurm(HPCProjectBase):
                  2: ['pass2_slurm.sh', 'pass2_single.py'],
                  3: ['pass3_slurm.sh', 'pass3_single.py'],
                  4: ['pass4_slurm.sh', 'pass4_single.py'],
+                 8: ['make_underground_videos.sh'],
                  9: ['make_underground_video.sh']}
     files_cleanup = {0: ['log_copy_video_*.txt'],
                      1: ['pass1_job_id.txt', 'status_pass1.yaml', 'log_pass1*'],
                      2: ['pass2_job_id.txt', 'status_pass2.yaml', 'log_pass2*'],
                      3: ['pass3_job_id.txt', 'status_pass3.yaml', 'log_pass3*'],
                      4: ['pass4_job_id.txt', 'status_pass4.yaml', 'log_pass4*'],
+                     8: ['log_underground_videos_*.txt'],
                      9: ['log_underground_video_*.txt']}
     
     # file name patterns used here
@@ -95,25 +97,56 @@ class ProjectSingleSlurm(HPCProjectBase):
             
             # submit new jobs
             for pass_id in self.passes:
-                # create job command
-                cmd = ['sbatch']
-                if job_id is not None:
-                    cmd.append('--dependency=afterok:%d' % job_id)
-                cmd.append(self.files_job[pass_id][0])
-
-                # submit command and fetch job_id from output
-                try:
-                    res = sp.check_output(cmd)
-                except sp.CalledProcessError as err:
-                    # output the error message if there is any
-                    self.logger.error(err.output)
-                    raise
+                if pass_id == 8:
+                    # special job that needs to be submitted separately
+                    self.submit_underground_videos()
                     
-                job_id = int(res.split()[-1])
-                # save job_id to file
-                with open(self.job_ids_file, 'a') as f:
-                    f.write('pass %d - %d\n' % (pass_id, job_id))
-                self.logger.info('Job id of pass %d: %d', pass_id, job_id)
+                else:
+                    # create job command
+                    cmd = ['sbatch']
+                    if job_id is not None:
+                        cmd.append('--dependency=afterok:%d' % job_id)
+                    cmd.append(self.files_job[pass_id][0])
+    
+                    # submit command and fetch job_id from output
+                    try:
+                        res = sp.check_output(cmd)
+                    except sp.CalledProcessError as err:
+                        # output the error message if there is any
+                        self.logger.error(err.output)
+                        raise
+                        
+                    job_id = int(res.split()[-1])
+                    # save job_id to file
+                    with open(self.job_ids_file, 'a') as f:
+                        f.write('pass %d - %d\n' % (pass_id, job_id))
+                    self.logger.info('Job id of pass %d: %d', pass_id, job_id)
+
+
+    def submit_underground_videos(self, job_count):
+        """ submit a slurm job array for creating the underground video. The 
+        number of jobs must be provided """
+        
+        with change_directory(self.folder):
+            # prepare the submission
+            cmd = ['sbatch',
+                   '--array=0-%d' % (job_count - 1),
+                   'make_underground_videos.sh']
+
+            # submit command and fetch job_id from output
+            try:
+                res = sp.check_output(cmd)
+            except sp.CalledProcessError as err:
+                # output the error message if there is any
+                self.logger.error(err.output)
+                raise
+
+            job_id = int(res.split()[-1])
+            # save job_id to file
+            with open(self.job_ids_file, 'a') as f:
+                f.write('pass 8 - %d\n' % job_id)
+            self.logger.info('Job id of pass 8 (%d subjobs): %d',
+                             job_count, job_id)
 
 
     def check_log_for_error(self, log_file):
