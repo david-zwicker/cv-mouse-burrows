@@ -28,6 +28,6 @@ cd {JOB_DIRECTORY}
     --video_part $SLURM_ARRAY_TASK_ID
 
 # copy video to final destination
-mv -f /scratch/underground_video_$task_id* {JOB_DIRECTORY}/underground_video/
+mv --backup=numbered /scratch/underground_video_$task_id* {JOB_DIRECTORY}/underground_video/
 
 echo "Ended job number $task_id with id $SLURM_JOB_ID"
