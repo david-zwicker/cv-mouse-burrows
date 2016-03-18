@@ -10,7 +10,10 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user={NOTIFICATION_EMAIL}
 
-echo "Start job number $SLURM_ARRAY_TASK_ID with id $SLURM_JOB_ID"
+# format task id
+task_id=$(printf "%0*d\n" 2 $SLURM_ARRAY_TASK_ID)
+
+echo "Start job number $task_id with id $SLURM_JOB_ID"
 
 # load python environment
 source ~/.profile
@@ -20,11 +23,11 @@ cd {JOB_DIRECTORY}
 # run script to create underground movie
 ~/Code/cv-mouse-burrows/mouse_burrows/scripts/get_underground_movie.py \
     --result_file {JOB_DIRECTORY}/{NAME}_results.yaml \
-    --output_file /scratch/underground_video_%02a \
+    --output_file /scratch/underground_video_$task_id \
     --scale_bar \
     --video_part $SLURM_ARRAY_TASK_ID
 
 # copy video to final destination
-mv -f /scratch/underground_video_%02a* {JOB_DIRECTORY}/underground_video/
+mv -f /scratch/underground_video_$task_id* {JOB_DIRECTORY}/underground_video/
 
-echo "Ended job number $SLURM_ARRAY_TASK_ID with id $SLURM_JOB_ID"
+echo "Ended job number $task_id with id $SLURM_JOB_ID"
