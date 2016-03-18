@@ -123,16 +123,18 @@ class ProjectSingleSlurm(HPCProjectBase):
                     self.logger.info('Job id of pass %d: %d', pass_id, job_id)
 
 
-    def submit_underground_videos(self, job_count):
+    def submit_underground_videos(self, job_parts):
         """ submit a slurm job array for creating the underground video. The 
-        number of jobs must be provided """
+        `job_parts` determine which jobs will be submitted as a job array. This
+        uses the slurm job array syntax, i.e. ranges should be given as `0-10`,
+        and lists can be supplied by `1,3,6` """
         
         with change_directory(self.folder):
             ensure_directory_exists('underground_video')
             
             # prepare the submission
             cmd = ['sbatch',
-                   '--array=0-%d' % (job_count - 1),
+                   '--array=%s' % job_parts,
                    'make_underground_videos.sh']
 
             # submit command and fetch job_id from output
@@ -147,8 +149,7 @@ class ProjectSingleSlurm(HPCProjectBase):
             # save job_id to file
             with open(self.job_ids_file, 'a') as f:
                 f.write('pass 8 - %d\n' % job_id)
-            self.logger.info('Job id of pass 8 (%d subjobs): %d',
-                             job_count, job_id)
+            self.logger.info('Job id of pass 8: %d', job_id)
 
 
     def check_log_for_error(self, log_file):
