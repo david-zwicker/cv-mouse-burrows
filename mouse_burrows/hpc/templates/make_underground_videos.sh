@@ -22,7 +22,7 @@ cd {JOB_DIRECTORY}
     --result_file {JOB_DIRECTORY}/{NAME}_results.yaml \
     --output_file /scratch/underground_video_%02a \
     --scale_bar \
-    --video_id $SLURM_ARRAY_TASK_ID
+    --video_part $SLURM_ARRAY_TASK_ID
 
 # copy video to final destination
 mv -f /scratch/underground_video_%02a* {JOB_DIRECTORY}/underground_video/
