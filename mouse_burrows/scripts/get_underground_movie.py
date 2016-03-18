@@ -60,13 +60,19 @@ def main():
     # fetch the arguments and build the parameter list
     args = parser.parse_args()
     
+    # prepare the bout slice argument
+    if args.bout_slice:
+        bout_slice = slice(*args.bout_slice)
+    else:
+        bout_slice = slice(None, None)
+    
     # create the video
     make_underground_video(result_file=args.result_file,
                            output_video=args.output_file,
                            display=args.display, scale_bar=args.scale_bar,
                            min_duration=args.min_duration,
                            blank_duration=args.blank_duration,
-                           bouts=slice(*args.bout_slice),
+                           bouts_slice=bout_slice,
                            video_part=args.video_part)
     
 
