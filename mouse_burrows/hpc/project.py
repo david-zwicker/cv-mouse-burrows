@@ -18,6 +18,7 @@ import numpy as np
 from ..algorithm.parameters import PARAMETERS_DEFAULT
 from ..simple import load_result_file
 from utils.data_structures import NestedDict
+from utils.files import ensure_directory_exists
 from utils.files import MAIN_DIRECTORY as VIDEO_ANALYSIS_DIRECTORY
 
 
@@ -240,10 +241,7 @@ class HPCProjectBase(object):
             params[key.upper()] = value
         
         # ensure that the result folder exists
-        try:
-            os.makedirs(self.folder)
-        except OSError:
-            pass
+        ensure_directory_exists(self.folder)
         
         # set up job scripts
         for pass_id in self.passes:

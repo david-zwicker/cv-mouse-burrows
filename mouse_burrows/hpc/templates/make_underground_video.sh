@@ -17,7 +17,7 @@ source ~/.profile
 # change to job directory
 cd {JOB_DIRECTORY}
 # run script to create underground movie
-~/Code/video-analysis/projects/mouse_burrows/scripts/get_underground_movie.py \
+{SCRIPT_DIRECTORY}/get_underground_movie.py \
     --result_file {JOB_DIRECTORY}/{NAME}_results.yaml \
     --scale_bar
 

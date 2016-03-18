@@ -12,7 +12,7 @@ import os
 import yaml
 
 from .project import HPCProjectBase
-from utils.files import change_directory
+from utils.files import change_directory, ensure_directory_exists
 
 
 
@@ -128,6 +128,8 @@ class ProjectSingleSlurm(HPCProjectBase):
         number of jobs must be provided """
         
         with change_directory(self.folder):
+            ensure_directory_exists('underground_video')
+            
             # prepare the submission
             cmd = ['sbatch',
                    '--array=0-%d' % (job_count - 1),
