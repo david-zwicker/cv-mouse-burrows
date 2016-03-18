@@ -754,7 +754,6 @@ class Analyzer(DataHandler):
         """
         # try loading the distances from the tracked data
         try:
-            raise RuntimeError
             mouse_ground_dists = self.get_mouse_track_data('ground_dist')
         except RuntimeError:
             # data from second pass is not available
