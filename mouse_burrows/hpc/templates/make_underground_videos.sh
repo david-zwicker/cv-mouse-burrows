@@ -10,6 +10,8 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user={NOTIFICATION_EMAIL}
 
+hostname
+
 # format task id
 task_id=$(printf "%0*d" 2 $SLURM_ARRAY_TASK_ID)
 

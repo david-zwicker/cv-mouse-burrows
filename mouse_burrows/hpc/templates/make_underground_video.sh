@@ -10,6 +10,8 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user={NOTIFICATION_EMAIL}
 
+hostname
+
 echo "Start job with id $SLURM_JOB_ID"
 
 # load python environment

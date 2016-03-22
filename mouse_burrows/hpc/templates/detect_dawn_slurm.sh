@@ -9,6 +9,8 @@
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user=dzwicker@seas.harvard.edu
 
+hostname
+
 echo "Start job with id $SLURM_JOB_ID"
 
 # load python environment
