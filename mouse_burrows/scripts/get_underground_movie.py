@@ -48,7 +48,7 @@ def main():
                         metavar='FRAMES',
                         help='minimal number of frames the mouse has to be '
                              'below ground to include the bout into the video')
-    parser.add_argument('-b', '--blank_duration', type=float, default=5,
+    parser.add_argument('-b', '--blank_duration', type=float, default=15,
                         metavar='FRAMES',
                         help='number of blank frames inserted between bouts')
     group = parser.add_mutually_exclusive_group()
