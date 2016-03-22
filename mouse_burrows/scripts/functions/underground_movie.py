@@ -60,7 +60,7 @@ def get_underground_bouts(analyzer, bouts_slice=slice(None, None),
     mouse_ground_dists = analyzer.get_mouse_ground_distances()
 
     # find time periods where the mouse is underground long enough
-    bouts = contiguous_true_regions(mouse_ground_dists > 0)
+    bouts = contiguous_true_regions(mouse_ground_dists < 0)
     
     # restrict to the periods that we are interested in
     bouts = bouts[bouts_slice]
