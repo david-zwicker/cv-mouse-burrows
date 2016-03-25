@@ -205,6 +205,12 @@ def make_underground_video(result_file, output_video=None, display='time',
                 # output the frame
                 video_output.add_text(str(frame_id), label_pos, color='w',
                                       anchor='upper center')
+                
+            elif display == 'none' or display is None:
+                pass
+            
+            else:
+                raise ValueError('Unknown `display` variable.')
 
     # show summary
     frames_total = video_info['frames'][1] - video_info['frames'][0]

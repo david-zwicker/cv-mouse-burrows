@@ -748,13 +748,17 @@ class Analyzer(DataHandler):
     #===========================================================================
 
 
-    def get_mouse_ground_distances(self):
+    def get_mouse_ground_distances(self, night_only=False):
         """ return the distance of the mouse to the ground for all time points.
         Negative distances indicate that the mouse is below the ground.
+        `night_only` determines whether only the data during the night will be
+            returned. Note that this also removes the first couple of frames
+            that might have been skipped.
         """
         # try loading the distances from the tracked data
         try:
-            mouse_ground_dists = self.get_mouse_track_data('ground_dist')
+            mouse_ground_dists = self.get_mouse_track_data('ground_dist',
+                                                           night_only)
         except RuntimeError:
             # data from second pass is not available
             mouse_ground_dists = None
