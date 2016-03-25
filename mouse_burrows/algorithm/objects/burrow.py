@@ -256,8 +256,8 @@ class Burrow(shapes.Polygon):
             self._centerline = np.array(points, np.double)
             self.length = curves.curve_length(self._centerline)
         self._cache = {}
-
-
+        
+    
     def determine_centerline(self):
         """ determines the centerline """
         spacing = self.parameters['centerline_segment_length']
@@ -283,8 +283,16 @@ class Burrow(shapes.Polygon):
             graph.add_and_connect_node_point(endpoint.coords)
         
         return graph
-
-
+    
+    
+    @cached_property
+    def segment_lengths(self):
+        """ returns the lengths of all the segments """
+        lengths =  np.hypot(self.centerline[1:, 0] - self.centerline[:-1, 0],
+                            self.centerline[1:, 1] - self.centerline[:-1, 1])
+        return np.r_[0, lengths]
+    
+    
     def merge(self, other):
         """ merge this burrow with another one """
         polygon = self.polygon.union(other.polygon)
@@ -322,6 +330,49 @@ class Burrow(shapes.Polygon):
     @property
     def is_valid(self):
         return len(self._contour) > 3
+    
+    
+    def get_entry_angle(self, distance):
+        """ estimates the angle of the entrance by averaging the angle over the
+        given `distance` """
+        # get lengths to the n-th point
+        lengths = np.cumsum(self.segment_lengths)
+        
+        # determine the points between which we calculate the angle
+        p0 = self.centerline[0]
+        try:
+            p1_idx = np.flatnonzero(lengths > distance)[0]
+        except IndexError:
+            # the centerline was not long enough
+            return np.nan
+        else:
+            p1 = self.centerline[p1_idx]
+
+        # calculate the angle, note that y-axis points down
+        return np.arctan2(p0[1] - p1[1], p1[0] - p0[0])
+            
+    
+    def get_exit_angle(self, distance):
+        """ estimates the angle of the exit by averaging the angle over the
+        given `distance` """
+        # get lengths to the n-th point
+        lengths = np.cumsum(self.segment_lengths)
+        
+        # small consistency check
+        assert (lengths[-1] - self.length) < 1e-2
+        
+        # determine the points between which we calculate the angle
+        p0 = self.centerline[-1]
+        try:
+            p1_idx = np.flatnonzero(lengths < lengths[-1] - distance)[-1]
+        except IndexError:
+            # the centerline was not long enough
+            return np.nan
+        else:
+            p1 = self.centerline[p1_idx]
+
+        # calculate the angle, note that y-axis points down
+        return np.arctan2(p0[1] - p1[1], p1[0] - p0[0])
     
     
     def intersects(self, burrow_or_shape):

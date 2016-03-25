@@ -42,6 +42,7 @@ default_parameters = {
     'burrow/width_typical': 30,
     'burrow/branch_length_min': 150,
     'burrow/branch_point_separation': 100,
+    'burrow/angle_measurement_distance_cm': 8,
     'cage/width_norm': 85.5,
     'cage/width_min': 80,
     'cage/width_max': 95,
@@ -278,48 +279,6 @@ class AntfarmShapes(object):
             self._add_burrow_angle_statistics(burrow, ground_line)
         
         return
-        
-        # filter branches to make sure that they are not all connected to ground
-        
-        # determine the morphological graph
-        graph = burrow.get_morphological_graph()
-        
-        # combine multiple branches at exits and remove short branches that are
-        # not exits
-        exit_nodes = []
-        for points_exit in burrow.get_exit_regions(ground_line):
-            exit_line = geometry.LineString(points_exit)
-
-            # find the graph nodes that are close to the exit            
-            graph_nodes = []
-            for node, data in graph.nodes(data=True):
-                node_point = geometry.Point(data['coords'])
-                if exit_line.distance(node_point) < 3:
-                    graph_nodes.append((node, node_point))
-
-            # find the graph node that is closest to the exit point
-            exit_point = exit_line.interpolate(0.5, normalized=True)
-            dists = [exit_point.distance(node_point)
-                     for _, node_point in graph_nodes]
-            exit_id = np.argmin(dists)
-            
-            for node_id, (node, _) in enumerate(graph_nodes):
-                if node_id == exit_id:
-                    # save the exit node for later use
-                    exit_nodes.append(node)
-                else:
-                    # remove additional graph nodes
-                    graph.remove_node(node)                           
-                
-        # remove short branches that are not exit nodes
-        length_min = self.params['burrow/branch_length_min']
-        graph.remove_short_edges(length_min=length_min,
-                                 exclude_nodes=exit_nodes)
-                
-        # remove nodes of degree two  
-        graph.simplify()
-
-        burrow.morphological_graph = graph
                 
                 
     def add_debug_output(self):
@@ -358,6 +317,11 @@ class AntfarmShapes(object):
                     color = (0, 255, 0)
                 coords = tuple([int(c) for c in e_p.coords])
                 cv2.circle(self.image, coords, 10, color, thickness=-1)
+                
+#             # mark beginning of the centerline
+#             p = burrow.centerline[0]
+#             cv2.circle(self.image, (int(p[0]), int(p[1])), 15, (255, 255, 255),
+#                        thickness=2)
 
         
     def write_debug_image(self, filename):
@@ -575,6 +539,41 @@ class AntfarmShapes(object):
             exit_length += curves.point_distance(points[0], points[-1])
             
         return exit_length
+    
+    
+    def _centerline_is_oriented(self, burrow):
+        """ returns True if the centerline is oriented correctly, i.e. if it
+        starts at the lowest exit """
+        first_point = burrow.centerline[0]
+        last_point = burrow.centerline[-1]
+        
+        # determine the exit points
+        exit_points = [e_p.coords for e_p in burrow.endpoints if e_p.is_exit]
+        exit_points = geometry.MultiPoint(exit_points)
+        
+        # check whether the points are exit points
+        burrow_width = self.params['burrow/width_typical']
+        first_is_exit = (exit_points.distance(geometry.Point(first_point)) 
+                         < burrow_width)
+        last_is_exit = (exit_points.distance(geometry.Point(last_point))
+                        < burrow_width)
+        
+        if first_is_exit:
+            if last_is_exit:
+                # check whether the first point is lower than the last point
+                # note that the y-axis points down  
+                return (first_point[1] > last_point[1])
+            else:
+                # only the first point is an exit
+                return True
+        
+        else: # first point is not an exit
+            if last_is_exit:
+                # only the last point is an exit
+                return False
+            else:
+                # neither of the points is an exit
+                return True
         
         
     def get_statistics(self):
@@ -592,7 +591,7 @@ class AntfarmShapes(object):
         # check the scale bar
         if self.scale_bar:
             logging.info('Found %d pixel long scale bar' % self.scale_bar.size)
-            cm_per_pixel = self.params['scale_bar/length_cm']/self.scale_bar.size
+            cm_per_pixel = self.params['scale_bar/length_cm'] / self.scale_bar.size
             units = pint.UnitRegistry()
             scale_factor = cm_per_pixel * units.cm
 
@@ -611,6 +610,10 @@ class AntfarmShapes(object):
         else:
             scale_factor = 1
             result['scale_bar'] = None
+
+        # determine some parameters
+        angle_dist_px = (self.params['burrow/angle_measurement_distance_cm']
+                         / cm_per_pixel)
         
         # collect result of all burrows
         result['burrows'] = []
@@ -621,6 +624,31 @@ class AntfarmShapes(object):
             branch_length = sum(curves.curve_length(points)
                                 for points in burrow.branches)
             
+            # determine burrow angles and distance between end points
+            angle1 = np.rad2deg(burrow.get_entry_angle(angle_dist_px))
+            angle2 = np.rad2deg(burrow.get_exit_angle(angle_dist_px))
+            level_difference = (burrow.centerline[0, 1]
+                                - burrow.centerline[-1, 1])
+            
+            # make sure the values are reported correctly
+            if self._centerline_is_oriented(burrow):
+                angle_entrance, angle_exit = angle1, angle2
+            else:
+                # switch the measurements as if the centerline was reoriented
+                angle_entrance, angle_exit = angle2, angle1
+                level_difference *= -1
+                
+            # get the branch angles, measured at the point on the centerline 
+            branch_angles = []
+            for branch in burrow.branches:
+                p0, p1 = branch[-1], branch[0]
+                # calculate the angle, note that y-axis points down
+                angle = np.arctan2(p0[1] - p1[1], p1[0] - p0[0])
+                branch_angles.append(np.rad2deg(angle))
+                
+            while len(branch_angles) < 2:
+                branch_angles.append(np.nan)
+
             #graph = burrow.morphological_graph 
             data = {'pos_x': burrow.centroid[0] * scale_factor,
                     'pos_y': burrow.centroid[1] * scale_factor,
@@ -629,8 +657,14 @@ class AntfarmShapes(object):
                     'length_upwards': burrow.length_upwards * scale_factor,
                     'fraction_upwards': burrow.length_upwards / burrow.length,
                     'exit_count': exit_count,
+                    'entrance_angle [degree]': angle_entrance,
+                    'exit_angle [degree]': angle_exit,
+                    'entrance_exit_difference': level_difference * scale_factor,
+#                     'centerline_oriented': self._centerline_is_oriented(burrow),
                     'branch_length': branch_length * scale_factor,
                     'branch_count': len(burrow.branches),
+                    'branch_angle_1 [degree]': branch_angles[0],
+                    'branch_angle_2 [degree]': branch_angles[1],
                     'total_length': (branch_length + burrow.length)*scale_factor,
                     'perimeter': burrow.perimeter * scale_factor,
                     'perimeter_exit': perimeter_exit * scale_factor,
