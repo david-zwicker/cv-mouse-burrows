@@ -37,6 +37,7 @@ from video import debug  # @UnusedImport
 
 
 default_parameters = {
+    'image/remove_border': 2, #< pixels to remove around the border
     'burrow_parameters': {'ground_point_distance': 2},
     'burrow/area_min': 5000,
     'burrow/width_typical': 30,
@@ -102,6 +103,13 @@ class AntfarmShapes(object):
                 
             img = cv2.imread(path)
             obj.image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) #< convert to RGB
+            
+            # remove some part of the border if requested
+            remove_border = obj.params['image/remove_border']
+            if remove_border > 0:
+                obj.image = obj.image[remove_border:-remove_border,
+                                      remove_border:-remove_border]
+            
             obj.filename = filename
             
         else:
