@@ -475,6 +475,10 @@ class AntfarmShapes(object):
                 # create a burrow from the outline
                 boundary = regions.get_enclosing_outline(burrow_poly)
 
+                # check if a correct burrow was produced
+                if len(boundary.coords) < 3:
+                    continue
+
                 burrow = Burrow(boundary.coords,
                                 parameters=self.params['burrow_parameters'])
                 burrows.append(burrow)
