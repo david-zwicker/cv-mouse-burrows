@@ -567,15 +567,20 @@ class AntfarmShapes(object):
         
         # determine the exit points
         exit_points = [e_p.coords for e_p in burrow.endpoints if e_p.is_exit]
-        exit_points = geometry.MultiPoint(exit_points)
         
-        # check whether the points are exit points
-        burrow_width = self.params['burrow/width_typical']
-        first_is_exit = (exit_points.distance(geometry.Point(first_point)) 
-                         < burrow_width)
-        last_is_exit = (exit_points.distance(geometry.Point(last_point))
-                        < burrow_width)
-        
+        if len(exit_points) == 0:
+            first_is_exit = last_is_exit = False
+                    
+        else: # there are exit points
+            exit_points = geometry.MultiPoint(exit_points)
+            
+            # check whether the points are exit points
+            burrow_width = self.params['burrow/width_typical']
+            first_is_exit = (exit_points.distance(geometry.Point(first_point)) 
+                             < burrow_width)
+            last_is_exit = (exit_points.distance(geometry.Point(last_point))
+                            < burrow_width)
+            
         if first_is_exit:
             if last_is_exit:
                 # check whether the first point is lower than the last point
