@@ -630,13 +630,20 @@ class AntfarmShapes(object):
                 
             result['scale_bar'] = {'length_pixel': self.scale_bar.size,
                                    'cm_per_pixel': cm_per_pixel}
+            
         else:
+            # there is no scale bar
             scale_factor = 1
             result['scale_bar'] = None
+            logging.warn('Could not find a scale bar in the image `%s`',
+                         self.name)
 
         # determine some parameters
-        angle_dist_px = (self.params['burrow/angle_measurement_distance_cm']
-                         / cm_per_pixel)
+        try:
+            angle_dist_px = (self.params['burrow/angle_measurement_distance_cm']
+                             / cm_per_pixel)
+        except UnboundLocalError:
+            angle_dist_px = self.params['burrow/angle_measurement_distance_cm']
         
         # collect result of all burrows
         result['burrows'] = []
