@@ -408,7 +408,7 @@ class AntfarmShapes(object):
     def get_groundline_from_image(self, mask):
         """ load burrow polygons from an image """
         # get the skeleton of the image
-        mask = image.mask_thinning(mask)
+        mask = image.mask_thinning(mask, method='guo-hall')
         
         # get the path between the two points in the mask that are farthest
         points = regions.get_farthest_points(mask, ret_path=True)
@@ -498,11 +498,17 @@ class AntfarmShapes(object):
             else:
                 logging.debug('Image appears to have a black background.')
         
-        # determine the limits of the color function
+        # Determine the limits of the color function
+        # Here, each limit is a tuple of two numbers, which define the range
+        # of acceptable colors. Note that there are two ranges, depending on
+        # whether the color channel should be absent or present
         if white_background:
-            limits = ((0, 230), (128, 255))
-        else:
-            limits = ((0, 30), (30, 255))
+            limits_absent = (0, 230)
+            limits_present = (128, 255) 
+        else: # dark background
+            limits_absent = (0, 30)
+            limits_present = (30, 255) 
+        limits = (limits_absent, limits_present)
         bounds = np.array([limits[int(c)] for c in color], np.uint8)
 
         # find the mask highlighting the respective colors
