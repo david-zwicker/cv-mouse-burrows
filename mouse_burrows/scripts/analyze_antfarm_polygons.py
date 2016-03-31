@@ -386,7 +386,8 @@ class AntfarmShapes(object):
                                     cv2.CHAIN_APPROX_NONE)[1]
 
         if len(contours) == 0:
-            raise ValueError('Could not find any scale bar in `%s`', self.name)
+            logging.warn('Could not find any scale bar in `%s`', self.name)
+            return None
 
         # pick the contour with the largest extent in either axes
         contour = max(contours, key=lambda cnt: cnt.ptp(axis=0).max())
@@ -407,7 +408,8 @@ class AntfarmShapes(object):
             logging.debug('Did find scale bar of length %g.', scale_bar.size)
             
         else:
-            logging.warn('Did not find any scale bar.')
+            logging.warn('Did not find a large enough scale bar in `%s`.',
+                         self.name)
             scale_bar = None
 
         return scale_bar
