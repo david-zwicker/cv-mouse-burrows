@@ -870,10 +870,6 @@ class Analyzer(DataHandler):
                   'period_duration': [(b - a)*self.time_scale 
                                       for a, b in frame_ivals]}
 
-        # add basic data
-        if 'base_folder' in keys:
-            result['base_folder'] = self.params['base_folder']
-
         # get the area changes of the ground line
         if 'ground_removed' in keys or 'ground_accrued' in keys:
             area_removed, area_accrued = [], []
@@ -1003,6 +999,10 @@ class Analyzer(DataHandler):
             keys = OmniContainer()
         
         result = {}
+
+        # add basic data
+        if 'base_folder' in keys:
+            result['base_folder'] = self.params['base_folder']
         
         # predug statistics
         if 'predug_area' in keys:
