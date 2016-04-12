@@ -7,7 +7,14 @@ Created on Dec 10, 2014
 
 import sys
 import os.path
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..', '..' ))
+
+# add the root of the video-analysis project to the path
+script_path = os.path.split(os.path.realpath(__file__))[0]
+package_path = os.path.abspath(os.path.join(script_path, '..'))
+sys.path.append(package_path)
+
+video_analysis_path_guess = os.path.join(package_path, '..', 'video-analysis')
+sys.path.append(os.path.abspath(video_analysis_path_guess))
 
 from collections import OrderedDict
 

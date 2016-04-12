@@ -56,7 +56,7 @@ Additionally, we save information about what time slice was actually analyzed:
 * `period_start`: The beginning of the analysis period in seconds 
 * `period_end`: The end of the analysis period in seconds 
 * `period_duration`: The duration of the analysis period in seconds 
-
+* `base_folder`: The folder where all the data is stored
 
 
 ## Full video statistics
