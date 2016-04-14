@@ -1003,6 +1003,10 @@ class Analyzer(DataHandler):
         # add basic data
         if 'base_folder' in keys:
             result['base_folder'] = self.params['base_folder']
+            
+        if 'video_width' in keys:
+            video_size = self.data['pass1/video/size']
+            result['video_width'] = int(video_size.split('x')[0])
         
         # predug statistics
         if 'predug_area' in keys:
