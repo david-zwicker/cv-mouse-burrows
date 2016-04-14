@@ -56,7 +56,6 @@ Additionally, we save information about what time slice was actually analyzed:
 * `period_start`: The beginning of the analysis period in seconds 
 * `period_end`: The end of the analysis period in seconds 
 * `period_duration`: The duration of the analysis period in seconds 
-* `base_folder`: The folder where all the data is stored
 
 
 ## Full video statistics
@@ -74,6 +73,12 @@ not for individual time periods
     the most. This is defined as the time period where the burrow cross section
     was increased the largest amount. In order to determine this time point, we
     do some smoothing and ignore the first minutes of burrowing.
+
+Additionally, we some general information about the experiment: 
+* `base_folder`: The folder where all the data is stored
+* `video_width`: The width of the cropped video, which only contains the one
+    antfarm. This value can be used to estimate the video resolution at which
+    the analysis was run.
 
 All burrow statistics are currently obtained by sweeping the mouse trail over
 time.
