@@ -74,7 +74,7 @@ not for individual time periods
     was increased the largest amount. In order to determine this time point, we
     do some smoothing and ignore the first minutes of burrowing.
 
-Additionally, we some general information about the experiment: 
+Additionally, we record some general information about the experiment: 
 * `base_folder`: The folder where all the data is stored
 * `video_width`: The width of the cropped video, which only contains the one
     antfarm. This value can be used to estimate the video resolution at which

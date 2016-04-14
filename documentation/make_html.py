@@ -43,14 +43,14 @@ def create_parameter_summary(outfile):
     with open(outfile, 'w') as fp:
         # list all the important parameters
         fp.write('Parameters\n====\n')
-        for key1, value1 in parameters.iteritems():
+        for key1, value1 in sorted(parameters.iteritems()):
             if isinstance(value1, NestedDict):
                 # we got a sub category
                 category, subset = key1, value1
                 fp.write("\n%s\n" % category)
                 fp.write("%s\n" % ("-" * len(category)))
 
-                for key2, value2 in subset.iteritems():
+                for key2, value2 in sorted(subset.iteritems()):
                     if isinstance(value2, NestedDict):
                         fp.write("* `%s`\n" % key2)
                         for parameter in value2.itervalues():
