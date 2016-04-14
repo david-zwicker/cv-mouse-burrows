@@ -182,6 +182,9 @@ PARAMETER_LIST = [
     Parameter('output/video/underground_video_length', 30*60*20, #< 20 min
               UNIT.TIME_FRAMES,
               'Typical length of the underground video in number of frames'),
+    Parameter('output/video/underground_display_item', 'time', UNIT.STRING,
+              'The item that is displayed in the underground video. This can '
+              'be either `time`, `frame`, or `none`.'),
     
     # Cage
     Parameter('cage/width_cm', 85.5, UNIT.LENGTH_CM,

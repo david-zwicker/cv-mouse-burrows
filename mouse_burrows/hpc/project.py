@@ -219,6 +219,10 @@ class HPCProjectBase(object):
             video_folder_temporary = os.path.dirname(video_file)
             video_file_temporary = video_file
         
+        # extract special parameters
+        video_display_item = \
+                        self.parameters['output/video/underground_display_item']
+        
         # setup tracking parameters
         tracking_parameters = self.parameters.to_dict(flatten=True)
         
@@ -235,7 +239,8 @@ class HPCProjectBase(object):
                   'VIDEO_FILE_TEMPORARY': video_file_temporary,
                   'TRACKING_PARAMETERS': pprint.pformat(tracking_parameters),
                   'SPECIFIC_PARAMETERS': pprint.pformat(parameters),
-                  'SCALE_LENGTH': scale_length}
+                  'SCALE_LENGTH': scale_length,
+                  'VIDEO_DISPLAY_ITEM': video_display_item}
         
         # setup job resources
         resource_iter = self.parameters['resources'].iteritems(flatten=True)

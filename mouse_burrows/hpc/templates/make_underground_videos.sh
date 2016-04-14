@@ -26,10 +26,12 @@ cd {JOB_DIRECTORY}
 ~/Code/cv-mouse-burrows/mouse_burrows/scripts/get_underground_movie.py \
     --result_file {JOB_DIRECTORY}/{NAME}_results.yaml \
     --output_file /scratch/underground_video_$task_id \
+    --display {VIDEO_DISPLAY_ITEM} \
     --scale_bar \
     --video_part $SLURM_ARRAY_TASK_ID
 
 # copy video to final destination
-mv --backup=numbered /scratch/underground_video_$task_id* {JOB_DIRECTORY}/underground_video/
+mv --backup=numbered /scratch/underground_video_$task_id* \
+    {JOB_DIRECTORY}/underground_video/
 
 echo "Ended job number $task_id with id $SLURM_JOB_ID"
