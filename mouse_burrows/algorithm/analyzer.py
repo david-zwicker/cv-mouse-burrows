@@ -1002,7 +1002,7 @@ class Analyzer(DataHandler):
 
         # add basic data
         if 'base_folder' in keys:
-            result['base_folder'] = self.params['base_folder']
+            result['base_folder'] = self.params['video/filename_pattern']
             
         if 'video_width' in keys:
             video_size = self.data['pass1/video/size']
