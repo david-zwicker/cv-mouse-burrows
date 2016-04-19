@@ -1006,13 +1006,14 @@ class Analyzer(DataHandler):
             
         if 'video_width' in keys:
             video_size = self.data['pass1/video/size']
-            try:
-                # assume that video_size is a string
-                width = video_size.split('x')[0]
-            except AttributeError:
-                # otherwise it should be a list or tuple of two items
-                width = video_size[0]
-            result['video_width'] = int(width)
+            
+            # for some strange reason, the video size is sometimes reported as
+            # a list of a string instead of only a string. We here detect these
+            # cases and correct them
+            if len(video_size) == 1 and len(video_size[0]) > 4:
+                video_size = video_size[0]
+                
+            result['video_width'] = int(video_size.split('x')[0])
         
         # predug statistics
         if 'predug_area' in keys:
