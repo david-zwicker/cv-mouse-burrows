@@ -113,7 +113,7 @@ PARAMETER_LIST = [
     Parameter('video/video_parameters/reopen_delay', 0, UNIT.TIME_SECONDS, 
               "Delay in seconds before a video is reopened. This can prevent "
               "some problems with filesystems"),
-    Parameter('video/video_parameters/video_info_method', 'header', UNIT.STRING, 
+    Parameter('video/video_parameters/video_info_method', 'ffprobe', UNIT.STRING, 
               "Determines how video information, like the total number of "
               "frames are determined. Possible values are `header` and "
               "`ffprobe`. Note that the header information might be inaccurate "
