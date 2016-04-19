@@ -134,6 +134,7 @@ output
   * `output/video/enabled = True`: Flag determining whether the final video should be produced
   * `output/video/period = 100`: How often are frames written to the output file
   * `output/video/codec = libx264`: ffmpeg video codec used for debug videos
+  * `output/video/underground_display_item = time`: The item that is displayed in the underground video. This can be either `time`, `frame`, or `none`.
   * `output/video/folder = results/`: Folder to which the result video is written
   * `output/video/bitrate = 2000k`: Bitrate used for debug videos
   * `output/video/mouse_trail_length = 1000`: The length of the trail indicating the mouse position in the past
@@ -225,6 +226,7 @@ video
 * `video/initial_adaptation_frames = 100`: Number of initial frames to skip during analysis
 * `video/rotation = 0`: Specifies how much the video will be rotated in counter-clockwise direction. The value specified will be multiplied by 90 degrees to specify the amount of rotation.
 * `video_parameters`
+  * `video/video_parameters/video_info_method = header`: Determines how video information, like the total number of frames are determined. Possible values are `header` and `ffprobe`. Note that the header information might be inaccurate but using ffprobe requires iterating through the video once.
   * `video/video_parameters/seek_method = auto`: Method used for seeking in videos. Can be any of ['exact', 'keyframe', 'auto']. If 'auto', the method is determined based on the ffmpeg version.
   * `video/video_parameters/seek_offset = 1`: The time the rough seek is placed before the target in order to make sure a keyframe is hit. This is only used if 'keyframe' is chosen as a 'seek_method'
   * `video/video_parameters/seek_max_frames = 100`: The maximal number of frames that will be seeked by simply iterating the video. If larger jumps are desired, the video will be reopened.

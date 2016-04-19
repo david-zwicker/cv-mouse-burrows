@@ -27,6 +27,7 @@ dateutil     | Being less picky about date formats
 descartes    | Debug plotting of shapes
 faulthandler | Detecting low level crashes
 grip         | Converting markdown to html 
+json         | For reading the output of ffprobe
 pandas       | Writing results to csv files
 pint         | Reporting results with physical units
 sharedmem    | Showing the videos in a separate process while iterating

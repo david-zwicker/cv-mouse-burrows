@@ -113,6 +113,11 @@ PARAMETER_LIST = [
     Parameter('video/video_parameters/reopen_delay', 0, UNIT.TIME_SECONDS, 
               "Delay in seconds before a video is reopened. This can prevent "
               "some problems with filesystems"),
+    Parameter('video/video_parameters/video_info_method', 'header', UNIT.STRING, 
+              "Determines how video information, like the total number of "
+              "frames are determined. Possible values are `header` and "
+              "`ffprobe`. Note that the header information might be inaccurate "
+              "but using ffprobe requires iterating through the video once."),
     Parameter('video/video_parameters/seek_method', 'auto', UNIT.STRING, 
               "Method used for seeking in videos. Can be any of ['exact', "
               "'keyframe', 'auto']. If 'auto', the method is determined based "
