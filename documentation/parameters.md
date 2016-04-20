@@ -96,7 +96,7 @@ ground
 * `ground/slope_max = 3`: Maximal slope of the side ridges
 * `ground/smoothing_sigma = 1000`: Standard deviation for Gaussian smoothing over time
 * `ground/template = `: Name of the ground template stored in the assets directory. If the template is not given or could not be found, an alternative method based on line scans is used.
-* `ground/template_aspect_factors = [ 0.7  0.8  0.9  1.   1.1  1.2  1.3]`: Different factors to try for scaling the template aspect ratio.
+* `ground/template_aspect_factors = [ 0.7  0.8  0.9  1.   1.1  1.2  1.3]`: Different factors to try for scaling the template aspect ratio
 * `ground/template_margin = 40`: Margin on the top and the bottom of the template.
 * `ground/template_width_factors = [ 0.7   0.75  0.8   0.85  0.9   0.95  1.  ]`: Different factors to try for scaling the template width with respect to the cage width.
 * `ground/template_width_fraction = 0.8`: Fraction of the full template width that is used for matching.
@@ -226,11 +226,12 @@ video
 * `video/initial_adaptation_frames = 100`: Number of initial frames to skip during analysis
 * `video/rotation = 0`: Specifies how much the video will be rotated in counter-clockwise direction. The value specified will be multiplied by 90 degrees to specify the amount of rotation.
 * `video_parameters`
-  * `video/video_parameters/video_info_method = header`: Determines how video information, like the total number of frames are determined. Possible values are `header` and `ffprobe`. Note that the header information might be inaccurate but using ffprobe requires iterating through the video once.
   * `video/video_parameters/seek_method = auto`: Method used for seeking in videos. Can be any of ['exact', 'keyframe', 'auto']. If 'auto', the method is determined based on the ffmpeg version.
+  * `video/video_parameters/ffprobe_cache = /Users/zwicker/.videos.sqlite`: File where video information obtained from ffprobe will be stored to prevent multiple runs of ffprobe on the same video
+  * `video/video_parameters/video_info_method = ffprobe`: Determines how video information, like the total number of frames are determined. Possible values are `header` and `ffprobe`. Note that the header information might be inaccurate but using ffprobe requires iterating through the video once.
   * `video/video_parameters/seek_offset = 1`: The time the rough seek is placed before the target in order to make sure a keyframe is hit. This is only used if 'keyframe' is chosen as a 'seek_method'
-  * `video/video_parameters/seek_max_frames = 100`: The maximal number of frames that will be seeked by simply iterating the video. If larger jumps are desired, the video will be reopened.
   * `video/video_parameters/reopen_delay = 0`: Delay in seconds before a video is reopened. This can prevent some problems with filesystems
+  * `video/video_parameters/seek_max_frames = 100`: The maximal number of frames that will be seeked by simply iterating the video. If larger jumps are desired, the video will be reopened.
 
 water_bottle
 ------------

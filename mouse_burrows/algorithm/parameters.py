@@ -107,14 +107,15 @@ PARAMETER_LIST = [
               "counter-clockwise direction. The value specified will be "
               "multiplied by 90 degrees to specify the amount of rotation."),
     Parameter('video/cropping_rect', None, None,
-              "Rectangle to which the video is cropped. This can be either four "
-              "numbers [left, top, width, height] or some string like "
+              "Rectangle to which the video is cropped. This can be either "
+              "four numbers [left, top, width, height] or some string like "
               "'upper left', 'lower right', etc."),
     # Parameters of the video reading class
     Parameter('video/video_parameters/reopen_delay', 0, UNIT.TIME_SECONDS, 
               "Delay in seconds before a video is reopened. This can prevent "
               "some problems with filesystems"),
-    Parameter('video/video_parameters/video_info_method', 'ffprobe', UNIT.STRING, 
+    Parameter('video/video_parameters/video_info_method', 'ffprobe',
+              UNIT.STRING, 
               "Determines how video information, like the total number of "
               "frames are determined. Possible values are `header` and "
               "`ffprobe`. Note that the header information might be inaccurate "
@@ -142,7 +143,8 @@ PARAMETER_LIST = [
     Parameter('logging/folder', 'logging/', UNIT.SUBFOLDER,
               'Folder to which the log file is written'),
     Parameter('logging/level_stderr', 'INFO', None,
-              'Level of messages to log to stderr [standard python logging levels]'),
+              'Level of messages to log to stderr [standard python logging '
+              'levels]'),
     Parameter('logging/level_file', 'INFO', None,
               'Level of messages to log to file if folder is set '
               '[standard python logging levels]'),
@@ -201,9 +203,9 @@ PARAMETER_LIST = [
               'Measured width of the cages/antfarms. The width is measured '
               'inside the cage, not including the frame.'),
     Parameter('cage/determine_boundaries', True, UNIT.BOOLEAN,
-              'Flag indicating whether the cropping rectangle should be determined '
-              'automatically. If False, we assume that the original video is '
-              'already cropped'),
+              'Flag indicating whether the cropping rectangle should be '
+              'determined automatically. If False, we assume that the original '
+              'video is already cropped'),
     Parameter('cage/restrict_to_largest_patch', True, UNIT.BOOLEAN,
               'Determines whether the cage analysis will be restricted to the '
               'largest patch in the first thresholded image.'),
@@ -221,9 +223,9 @@ PARAMETER_LIST = [
               'position of the bottom of the frame'),
     Parameter('cage/boundary_detection_thresholds', [0.7, 0.3, 0.7, 0.9],
               UNIT.LIST,
-              'Thresholds for the boundary detection algorithm. The four values '
-              'are the fraction of bright pixels necessary to define the '
-              'boundary for [left, top, right, bottom], respectively.'),
+              'Thresholds for the boundary detection algorithm. The four '
+              'values are the fraction of bright pixels necessary to define '
+              'the boundary for [left, top, right, bottom], respectively.'),
     Parameter('cage/width_min', 550, UNIT.LENGTH_PIXEL,
               'Minimal width of the cage. This is only used to make a '
               'plausibility test of the results'),
@@ -271,29 +273,29 @@ PARAMETER_LIST = [
               'Different factors to try for scaling the template width with '
               'respect to the cage width.'),
     Parameter('ground/template_aspect_factors', np.arange(0.7, 1.31, 0.1), None,
-              'Different factors to try for scaling the template aspect ratio.'),
+              'Different factors to try for scaling the template aspect ratio'),
     Parameter('ground/template_width_fraction', 0.8, UNIT.FRACTION,
               'Fraction of the full template width that is used for matching.'),
     Parameter('ground/template_margin', 40, UNIT.LENGTH_PIXEL,
               'Margin on the top and the bottom of the template.'),
     Parameter('ground/point_spacing', 20, UNIT.LENGTH_PIXEL,
               'Spacing of the support points describing the ground profile'),
-    Parameter('ground/linescan_length', 50, UNIT.DEPRECATED, #UNIT.LENGTH_PIXEL,
+    Parameter('ground/linescan_length', 50, UNIT.DEPRECATED, 
               'Length of the line scan used to determine the ground profile. '
               'Deprecated since 2014-12-19'),
     Parameter('ground/slope_detector_max_factor', 0.4, UNIT.FACTOR,
               'Factor important in the ridge detection step, where the ridge '
               'is roughly located by looking at vertical line scans and points '
-              'with large slopes are located. The smaller this factor, the more '
-              'such points are detected and the further up the profile is '
+              'with large slopes are located. The smaller this factor, the '
+              'more such points are detected and the further up the profile is '
               'estimated to be'),
     Parameter('ground/length_max', 1500, UNIT.LENGTH_PIXEL,
               'Maximal length of the ground profile above which it is rejected'),
-    Parameter('ground/curvature_energy_factor', 1, UNIT.DEPRECATED, #UNIT.FACTOR,
+    Parameter('ground/curvature_energy_factor', 1, UNIT.DEPRECATED,
               'Relative strength of the curvature energy to the image energy '
               'in the snake model of the ground line.'
               'Deprecated since 2014-12-19.'),
-    Parameter('ground/snake_energy_max', 10, UNIT.DEPRECATED, #UNIT.FACTOR,
+    Parameter('ground/snake_energy_max', 10, UNIT.DEPRECATED,
               'Determines the maximal energy the snake is allowed to have. '
               'Deprecated since 2014-12-19'),
     Parameter('ground/slope_max', 3, UNIT.FRACTION,
@@ -368,9 +370,6 @@ PARAMETER_LIST = [
               'Determines the width of the area in which the predug is '
               'searched for. Half the width is this factor times the width of '
               'the valley defined by the ground line.'),
-#     Parameter('predug/search_zscore_threshold', 0.5, UNIT.FACTOR,
-#               'The zscore threshold that is used to distinguish predug pixels '
-#               'from background sand pixels.'),
     Parameter('predug/simplify_threshold', 5, UNIT.AREA_PIXEL,
               'Threshold value for simplifying the contour line of the '
               'predug.'),
@@ -576,30 +575,54 @@ PARAMETER_LIST = [
               'Email address of the user to be notified in case of problems.'),
     Parameter('resources/slurm_partition', 'general', None,
               'Name of the slurm partition to use for submitting jobs'),
+                  
     Parameter('resources/pass0/job_id', None, None, 'Job id of pass 0'),              
-    Parameter('resources/pass0/cores', 1, UNIT.INTEGER, 'Number of cores for pass 0'),
-    Parameter('resources/pass0/time', 10*60, None, 'Maximal computation minutes for pass 0'),
-    Parameter('resources/pass0/memory', 1000, None, 'Maximal RAM per core for pass 0 [in MB]'),
+    Parameter('resources/pass0/cores', 1, UNIT.INTEGER,
+              'Number of cores for pass 0'),
+    Parameter('resources/pass0/time', 10*60, None,
+              'Maximal computation minutes for pass 0'),
+    Parameter('resources/pass0/memory', 1000, None,
+              'Maximal RAM per core for pass 0 [in MB]'),
+                  
     Parameter('resources/pass1/job_id', None, None, 'Job id of pass 1'),              
-    Parameter('resources/pass1/cores', 3, UNIT.INTEGER, 'Number of cores for pass 1'),
-    Parameter('resources/pass1/time', 50*60, None, 'Maximal computation minutes for pass 1'),
-    Parameter('resources/pass1/memory', 1000, None, 'Maximal RAM per core for pass 1 [in MB]'),
+    Parameter('resources/pass1/cores', 3, UNIT.INTEGER,
+              'Number of cores for pass 1'),
+    Parameter('resources/pass1/time', 50*60, None,
+              'Maximal computation minutes for pass 1'),
+    Parameter('resources/pass1/memory', 1000, None,
+              'Maximal RAM per core for pass 1 [in MB]'),
+                  
     Parameter('resources/pass2/job_id', None, None, 'Job id of pass 2'),              
-    Parameter('resources/pass2/cores', 1, UNIT.INTEGER, 'Number of cores for pass 2'),
-    Parameter('resources/pass2/time', 25*60, None, 'Maximal computation minutes for pass 2'),
-    Parameter('resources/pass2/memory', 8000, None, 'Maximal RAM per core for pass 2 [in MB]'),
+    Parameter('resources/pass2/cores', 1, UNIT.INTEGER,
+              'Number of cores for pass 2'),
+    Parameter('resources/pass2/time', 25*60, None,
+              'Maximal computation minutes for pass 2'),
+    Parameter('resources/pass2/memory', 8000, None,
+              'Maximal RAM per core for pass 2 [in MB]'),
+                  
     Parameter('resources/pass3/job_id', None, None, 'Job id of pass 3'),              
-    Parameter('resources/pass3/cores', 2, UNIT.INTEGER, 'Number of cores for pass 3'),
-    Parameter('resources/pass3/time', 30*60, None, 'Maximal computation minutes for pass 3'),
-    Parameter('resources/pass3/memory', 1000, None, 'Maximal RAM per core for pass 3 [in MB]'),
+    Parameter('resources/pass3/cores', 2, UNIT.INTEGER,
+              'Number of cores for pass 3'),
+    Parameter('resources/pass3/time', 30*60, None,
+              'Maximal computation minutes for pass 3'),
+    Parameter('resources/pass3/memory', 1000, None,
+              'Maximal RAM per core for pass 3 [in MB]'),
+                  
     Parameter('resources/pass4/job_id', None, None, 'Job id of pass 4'),              
-    Parameter('resources/pass4/cores', 2, UNIT.INTEGER, 'Number of cores for pass 4'),
-    Parameter('resources/pass4/time', 25*60, None, 'Maximal computation minutes for pass 4'),
-    Parameter('resources/pass4/memory', 2000, None, 'Maximal RAM per core for pass 4 [in MB]'),
-    Parameter('resources/pass9/cores', 2, UNIT.INTEGER, 'Number of cores for pass 9'),
+    Parameter('resources/pass4/cores', 2, UNIT.INTEGER,
+              'Number of cores for pass 4'),
+    Parameter('resources/pass4/time', 25*60, None,
+              'Maximal computation minutes for pass 4'),
+    Parameter('resources/pass4/memory', 2000, None,
+              'Maximal RAM per core for pass 4 [in MB]'),
+                  
+    Parameter('resources/pass9/cores', 2, UNIT.INTEGER,
+              'Number of cores for pass 9'),
     Parameter('resources/pass9/job_id', None, None, 'Job id of pass 9'),              
-    Parameter('resources/pass9/time', 50*60, None, 'Maximal computation minutes for pass 9'),
-    Parameter('resources/pass9/memory', 2000, None, 'Maximal RAM per core for pass 9 [in MB]'),
+    Parameter('resources/pass9/time', 50*60, None,
+              'Maximal computation minutes for pass 9'),
+    Parameter('resources/pass9/memory', 2000, None,
+              'Maximal RAM per core for pass 9 [in MB]'),
 ]
 
 
