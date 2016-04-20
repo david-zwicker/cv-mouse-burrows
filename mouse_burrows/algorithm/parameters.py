@@ -11,6 +11,7 @@ parameters.
 from __future__ import division
 
 from collections import namedtuple, defaultdict
+import os.path
 import warnings
 
 import numpy as np
@@ -118,7 +119,8 @@ PARAMETER_LIST = [
               "frames are determined. Possible values are `header` and "
               "`ffprobe`. Note that the header information might be inaccurate "
               "but using ffprobe requires iterating through the video once."),
-    Parameter('video/video_parameters/ffprobe_cache', None, UNIT.STRING,
+    Parameter('video/video_parameters/ffprobe_cache',
+              os.path.expanduser('~/.videos.sqlite'), UNIT.STRING,
               'File where video information obtained from ffprobe will be '
               'stored to prevent multiple runs of ffprobe on the same video'),
     Parameter('video/video_parameters/seek_method', 'auto', UNIT.STRING, 
