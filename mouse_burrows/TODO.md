@@ -26,6 +26,5 @@
 Performance improvements:
 -------------------------
 
-
 Low priority enhancements:
 --------------------------

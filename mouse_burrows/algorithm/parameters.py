@@ -118,6 +118,9 @@ PARAMETER_LIST = [
               "frames are determined. Possible values are `header` and "
               "`ffprobe`. Note that the header information might be inaccurate "
               "but using ffprobe requires iterating through the video once."),
+    Parameter('video/video_parameters/ffprobe_cache', None, UNIT.STRING,
+              'File where video information obtained from ffprobe will be '
+              'stored to prevent multiple runs of ffprobe on the same video'),
     Parameter('video/video_parameters/seek_method', 'auto', UNIT.STRING, 
               "Method used for seeking in videos. Can be any of ['exact', "
               "'keyframe', 'auto']. If 'auto', the method is determined based "
