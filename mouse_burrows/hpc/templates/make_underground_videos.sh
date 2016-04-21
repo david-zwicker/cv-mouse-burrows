@@ -26,7 +26,7 @@ cd {JOB_DIRECTORY}
 ~/Code/cv-mouse-burrows/mouse_burrows/scripts/get_underground_movie.py \
     --result_file {JOB_DIRECTORY}/{NAME}_results.yaml \
     --output_file /scratch/underground_video_$task_id \
-    --display {VIDEO_DISPLAY_ITEM} \
+    --display "{VIDEO_DISPLAY_ITEM}" \
     --scale_bar \
     --video_part $SLURM_ARRAY_TASK_ID
 

@@ -134,7 +134,7 @@ output
   * `output/video/enabled = True`: Flag determining whether the final video should be produced
   * `output/video/period = 100`: How often are frames written to the output file
   * `output/video/codec = libx264`: ffmpeg video codec used for debug videos
-  * `output/video/underground_display_item = time`: The item that is displayed in the underground video. This can be either `time`, `frame`, or `none`.
+  * `output/video/underground_display_item = {time} [{frame}]`: The data that is displayed in the underground video. Placeholders like `{time}` and `{frame}` are replaced by the data of the current frame.
   * `output/video/folder = results/`: Folder to which the result video is written
   * `output/video/bitrate = 2000k`: Bitrate used for debug videos
   * `output/video/mouse_trail_length = 1000`: The length of the trail indicating the mouse position in the past

@@ -79,17 +79,19 @@ def get_underground_bouts(analyzer, bouts_slice=slice(None, None),
 
 
 
-def make_underground_video(result_file, output_video=None, display='time',
-                           scale_bar=True, min_duration=60, blank_duration=5,
+def make_underground_video(result_file, output_video=None,
+                           display='{time} [{frame}]', scale_bar=True,
+                           min_duration=60, blank_duration=5,
                            bouts_slice=slice(None, None), video_part=None):
     """ main routine of the program
     `result_file` is the file where the results from the video analysis are
         stored. This is usually a *.yaml file
     `output_video` denotes the filename where the result video should be
         written to.
-    `display` determines what information is displayed. Possible values are
-        'time' to display real time or 'frame' to display the frame number. All
-         other values are ignored
+    `display` determines what information is displayed. There are several
+        variables that would be replaced by data:
+            {time} the current time stamp
+            {frame} the current frame number
     `scale_bar` determines whether a scale bar is shown
     `min_duration` determines how many frames the mouse has to be below ground
         for the bout to be included in the video
@@ -192,25 +194,21 @@ def make_underground_video(result_file, output_video=None, display='time',
                                       scale_bar_pos, color='w',
                                       anchor='upper center')
 
-            if display == 'time':
-                # output time
-                time_secs, time_frac = divmod(frame_id, fps)
-                time_msecs = int(1000 * time_frac / fps)
-                dt = datetime.timedelta(seconds=time_secs,
-                                        milliseconds=time_msecs)
-                video_output.add_text(str(dt), label_pos, color='w',
-                                      anchor='upper center')
-                
-            elif display == 'frame':
-                # output the frame
-                video_output.add_text(str(frame_id), label_pos, color='w',
-                                      anchor='upper center')
-                
-            elif display == 'none' or display is None:
-                pass
+            # gather data about this frame
+            frame_data = {'frame': frame_id}
             
-            else:
-                raise ValueError('Unknown `display` variable.')
+            # calculate time stamp
+            time_secs, time_frac = divmod(frame_id, fps)
+            time_msecs = int(1000 * time_frac / fps)
+            dt = datetime.timedelta(seconds=time_secs,
+                                    milliseconds=time_msecs)
+            frame_data['time'] = str(dt)
+                
+            # output the display data
+            if display:
+                display_text = display.format(**frame_data)
+                video_output.add_text(display_text, label_pos, color='w',
+                                      anchor='upper center')
 
     # show summary
     frames_total = video_info['frames'][1] - video_info['frames'][0]
