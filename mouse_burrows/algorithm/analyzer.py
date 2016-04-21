@@ -258,15 +258,26 @@ class Analyzer(DataHandler):
     
     def get_main_burrow(self):
         """ returns the track of the main burrow, which is defined to be the
-        longest burrow """
+        burrow with the largest area """
         burrow_tracks = self._get_burrow_tracks()
         
-        # find the longest burrow 
-        main_track, main_length = None, 0
-        for burrow_track in burrow_tracks:
-            max_length = burrow_track.get_max_length()
-            if max_length > main_length:
-                main_track, main_length = burrow_track, max_length
+#         # find the longest burrow 
+#         main_track, main_length = None, 0
+#         for burrow_track in burrow_tracks:
+#             max_length = burrow_track.get_max_length()
+#             if max_length > main_length:
+#                 main_track, main_length = burrow_track, max_length
+
+        predug, predug_track_id = self.get_burrow_predug(ret_track_id=True)
+
+        # find the burrow with the largest area 
+        main_track, main_area = None, 0
+        for track_id, burrow_track in enumerate(burrow_tracks):
+            max_area = burrow_track.last.area
+            if track_id == predug_track_id:
+                max_area -= predug.area
+            if max_area > main_area:
+                main_track, main_area = burrow_track, max_area
                   
         return main_track
     
@@ -298,7 +309,8 @@ class Analyzer(DataHandler):
             return None
         times = burrow_track.times
         assert is_equidistant(times)
-        time_delta =  (times[-1] - times[0])/(len(times) - 1)
+        # time delta is the duration after which we update the burrow data 
+        time_delta = (times[-1] - times[0])/(len(times) - 1)
 
         # ignore the initial frames
         ignore_interval = self.params['burrows/activity_ignore_interval']
@@ -451,6 +463,7 @@ class Analyzer(DataHandler):
         return distance
 
     
+    @cache
     def get_mouse_velocities(self, invalid=0):
         """ returns an array with mouse velocities as a function of time.
         Velocities at positions where we have no information about the mouse
@@ -884,7 +897,11 @@ class Analyzer(DataHandler):
                 result['ground_accrued'] = area_accrued * self.length_scale**2
 
         # get durations of the mouse being in different states        
-        for key, pattern in (('time_spent_moving', '...M'), 
+        for key, pattern in (('time_spent_aboveground', '.(A|H|V)..'),
+                             ('time_spent_underground', '.(B|D)..'), 
+                             ('time_spent_moving', '...M'), 
+                             ('time_spent_moving_aboveground', '.(A|H|V).M'), 
+                             ('time_spent_moving_underground', '.(B|D).M'), 
                              ('time_at_burrow_end', '.(B|D)E.')):
             # special case in which the calculation has to be done
             c = (key == 'time_at_burrow_end' and 'mouse_digging_rate' in keys)
@@ -903,12 +920,32 @@ class Analyzer(DataHandler):
             'mouse_speed_mean_valid': lambda x: np.nanmean(x),
             'mouse_speed_max': lambda x: np.nanmax(x)
         }
-        if any(key in keys for key in speed_statistics.keys()):
-            velocities = self.get_mouse_velocities()
-            speed = np.hypot(velocities[:, 0], velocities[:, 1])
-            for key, stat_func in speed_statistics.iteritems():
-                res = [stat_func(speed[t_slice]) for t_slice in frame_slices]
-                result[key] = np.array(res) * self.speed_scale
+        # iterate through all regions that we want to distinguish
+        for suffix, pattern in [('', '....'),
+                                ('_aboveground', '.(A|H|V)..'),
+                                ('_underground', '.(B|D)..')]:
+            
+            # iterate through all velocity statistics that we want to distinguish
+            if any(key + suffix in keys for key in speed_statistics.keys()):
+                # get velocities
+                velocities = self.get_mouse_velocities()
+                speed = np.hypot(velocities[:, 0], velocities[:, 1])
+                # get the states that match the region pattern
+                states = self.get_mouse_state_vector([pattern])
+                
+                for key, stat_func in speed_statistics.iteritems():
+                    # get the states
+                    res = [] 
+                    for t_slice in frame_slices:
+                        # restrict values to the right time slice
+                        speed_sliced = speed[t_slice]
+                        states_sliced = states[t_slice]
+                        # find the speed where the mouse is in the right state
+                        speed_in_state = speed_sliced[states_sliced == 0]
+                        # calculate the respective statistics
+                        res.append(stat_func(speed_in_state))
+#                     res = [stat_func(speed[t_slice]) for t_slice in frame_slices]
+                    result[key + suffix] = np.array(res) * self.speed_scale
         
         # get distance statistics
         if 'mouse_distance_covered' in keys:
@@ -967,6 +1004,7 @@ class Analyzer(DataHandler):
             else:
                 unit_rate = 1
                 area_min = 0
+                
             # calculate the digging rate
             digging_rate = []
             for area, time in itertools.izip(result['burrow_area_excavated'],

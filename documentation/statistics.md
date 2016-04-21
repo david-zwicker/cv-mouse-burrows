@@ -12,10 +12,10 @@ For each period, the following statistics can be calculated:
     between the start and the end of the time period.   
 * `ground_removed`: The area of the region which was below the ground line in the
     first frame and is now above ground in the last frame.
-* `ground_accrued`: The area of the region which was above the ground line in the
-    first frame and is now below ground in the last frame.
-* `time_burrow_grew`: The total time during which the burrow grew. This is a
-    proxy for burrowing activity.
+* `ground_accrued`: The area of the region which was above the ground line in
+    the first frame and is now below ground in the last frame.
+* `time_burrow_grew`: The total time during which the burrow area grew. This is
+    a proxy for burrowing activity.
 * `fraction_burrow_grew`: The associated fraction of the time during which the
     burrow grew.
 * `time_at_burrow_end`: The total time the mouse spent at the end of a burrow.
@@ -48,7 +48,7 @@ For each period, the following statistics can be calculated:
     the ground. This distance is given by the distance of the mouse to the point
     on the ground line that is directly above it, irrespective of any burrows.
 * `mouse_digging_rate`: The rate of digging during the time period. This value
-    is calculated by dividing `burrow_area_excavated` by `time_spent_digging`.
+    is calculated by dividing `burrow_area_excavated` by `time_at_burrow_end`.
     
 Additionally, we save information about what time slice was actually analyzed:
 
@@ -70,8 +70,8 @@ not for individual time periods
 * `burrow_length_max`: The length of the longest burrow
 * `burrow_main_initiated`: The time at which the main burrow was initiated
 * `burrow_main_peak_activity`: The time at which the main burrow was extended
-    the most. This is defined as the time period where the burrow cross section
-    was increased the largest amount. In order to determine this time point, we
+    the most. This is defined as the time period where the burrow area was
+    increased the largest amount. In order to determine this time point, we
     do some smoothing and ignore the first minutes of burrowing.
 
 Additionally, we record some general information about the experiment: 

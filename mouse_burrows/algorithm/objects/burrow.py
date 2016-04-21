@@ -514,7 +514,7 @@ class BurrowTrack(object):
     def track_end(self): return self.times[-1]
     
     
-    def get_max_length(self):    
+    def get_max_length(self):
         """ returns the maximal length of the burrow """
         return max(burrow.length for burrow in self.burrows)
 
