@@ -50,8 +50,8 @@
 <a id="user-content-time-period-statistics" class="anchor" href="#time-period-statistics" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Time period statistics</h2>
 
 <p>These are statistics that can be calculated for any time period of the video.
-Typically, we calculate the statistics for time slices of half an hour to see the
-development over time. Additionally, these statistics can be calculated for
+Typically, we calculate the statistics for time slices of half an hour to see
+the development over time. Additionally, these statistics can be calculated for
 the entire video.
 For each period, the following statistics can be calculated:</p>
 
@@ -62,14 +62,14 @@ the given time period. This value is the difference of the areas of burrows
 between the start and the end of the time period.<br>
 </li>
 <li>
-<code>ground_removed</code>: The area of the region which was below the ground line in the
-first frame and is now above ground in the last frame.</li>
+<code>ground_removed</code>: The area of the region which was below the ground line in
+the first frame and is now above ground in the last frame.</li>
 <li>
-<code>ground_accrued</code>: The area of the region which was above the ground line in the
-first frame and is now below ground in the last frame.</li>
+<code>ground_accrued</code>: The area of the region which was above the ground line in
+the first frame and is now below ground in the last frame.</li>
 <li>
-<code>time_burrow_grew</code>: The total time during which the burrow grew. This is a
-proxy for burrowing activity.</li>
+<code>time_burrow_grew</code>: The total time during which the burrow area grew. This is
+a proxy for burrowing activity.</li>
 <li>
 <code>fraction_burrow_grew</code>: The associated fraction of the time during which the
 burrow grew.</li>
@@ -91,9 +91,9 @@ moving around.</li>
 Here, we assume a speed of zero for periods where we could not detect the
 mouse.</li>
 <li>
-<code>mouse_speed_mean_valid</code>: The mean speed of the mouse during the analysis period.
-The difference to the value above is that we here only included periods in
-which we could actually detect the mouse.</li>
+<code>mouse_speed_mean_valid</code>: The mean speed of the mouse during the analysis
+period. The difference to the value above is that we here only included
+periods in which we could actually detect the mouse.</li>
 <li>
 <code>mouse_speed_max</code>: The maximal speed the mouse attained during the analysis
 period.</li>
@@ -115,7 +115,25 @@ the ground. This distance is given by the distance of the mouse to the point
 on the ground line that is directly above it, irrespective of any burrows.</li>
 <li>
 <code>mouse_digging_rate</code>: The rate of digging during the time period. This value
-is calculated by dividing <code>burrow_area_excavated</code> by <code>time_spent_digging</code>.</li>
+is calculated by dividing <code>burrow_area_excavated</code> by <code>time_at_burrow_end</code>.</li>
+</ul>
+
+<p>There are also more detailed statistics, which are conditioned on the location
+of the mouse. Here, the curly brackets give the alternatives that are allowed
+for a given statistics:</p>
+
+<ul>
+<li>
+<code>time_spent_{aboveground|underground}</code>: This gives the time spent in the
+location <code>aboveground</code> or <code>underground</code>.</li>
+<li>
+<code>time_spent_moving_{aboveground|underground}</code>: This gives the time spent
+moving in the location <code>aboveground</code> or <code>underground</code>.</li>
+<li>
+<code>mouse_speed_{mean|mean_valid|max}_{aboveground|underground}</code>: This gives the
+speed statistics <code>speed_mean</code>, <code>speed_mean_valid</code>, or <code>speed_max</code> calculated
+for the period where the mouse is in the location <code>aboveground</code> or
+<code>underground</code>.</li>
 </ul>
 
 <p>Additionally, we save information about what time slice was actually analyzed:</p>
@@ -154,8 +172,8 @@ defined as the time around which the mean velocity of the mouse was highest.</li
 <code>burrow_main_initiated</code>: The time at which the main burrow was initiated</li>
 <li>
 <code>burrow_main_peak_activity</code>: The time at which the main burrow was extended
-the most. This is defined as the time period where the burrow cross section
-was increased the largest amount. In order to determine this time point, we
+the most. This is defined as the time period where the burrow area was
+increased the largest amount. In order to determine this time point, we
 do some smoothing and ignore the first minutes of burrowing.</li>
 </ul>
 
