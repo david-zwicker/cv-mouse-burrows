@@ -15,7 +15,9 @@ import re
 QUADRANTS = {'5': {'short': 'UL', 'position': 'upper left'},
              '6': {'short': 'UR', 'position': 'upper right'},
              '7': {'short': 'DL', 'position': 'lower left'},
-             '8': {'short': 'DR', 'position': 'lower right'}}
+             '8': {'short': 'DR', 'position': 'lower right'},
+             # '9' seems to be used synonymously to '8' 
+             '9': {'short': 'DR', 'position': 'lower right'}}
 
 # define the quadrants that appear in the experiments when two cameras are used
 QUADRANTS_HALF = {'5': {'short': 'U', 'position': 'upper'},
