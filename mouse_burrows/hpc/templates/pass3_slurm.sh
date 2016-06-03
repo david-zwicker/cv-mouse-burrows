@@ -20,7 +20,7 @@ mkdir -p {VIDEO_FOLDER_TEMPORARY}
 rsync -avzh --progress {VIDEO_FILE_SOURCE} {VIDEO_FOLDER_TEMPORARY}
 
 # increase process limit, because ffmpeg needs many threads
-ulimit -u 2048
+#ulimit -u 2048
 
 # load python environment
 source ~/.profile
