@@ -32,6 +32,7 @@ sys.path.append(project_path)
 from mouse_burrows.algorithm.objects import Burrow, GroundProfile
 from video.analysis import curves, image, regions, shapes
 from utils import data_structures, math
+from utils.files import ensure_directory_exists
 
 from video import debug  # @UnusedImport
 
@@ -779,6 +780,9 @@ def main():
 
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
+
+    if args.folder:
+        ensure_directory_exists(args.folder)
 
     if args.load_pkl:
         # load file from pickled data
