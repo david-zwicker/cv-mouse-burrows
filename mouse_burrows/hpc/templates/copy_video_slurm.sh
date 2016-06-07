@@ -6,8 +6,6 @@
 #SBATCH --mem-per-cpu={PASS0/MEMORY}   # Memory per cpu in MB (see also --mem)
 #SBATCH -o {JOB_DIRECTORY}/log_copy_video_%j.txt    # File to which stdout and stderr will be written
 #SBATCH --job-name=C_{NAME}
-#SBATCH --mail-type=NONE
-#SBATCH --mail-user={NOTIFICATION_EMAIL}
 
 hostname
 
