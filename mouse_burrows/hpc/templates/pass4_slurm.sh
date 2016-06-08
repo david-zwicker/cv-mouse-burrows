@@ -15,9 +15,6 @@ hostname
 echo "Start job with id $SLURM_JOB_ID"
 echo $SLURM_JOB_ID >> pass4_job_id.txt
 
-# increase process limit, because ffmpeg needs many threads
-#ulimit -u 2048
-
 # load python environment
 source ~/.profile
 # change to job directory
