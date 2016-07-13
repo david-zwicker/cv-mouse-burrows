@@ -211,6 +211,11 @@ PARAMETER_LIST = [
     Parameter('cage/restrict_to_largest_patch', True, UNIT.BOOLEAN,
               'Determines whether the cage analysis will be restricted to the '
               'largest patch in the first thresholded image.'),
+    Parameter('cage/threshold_basic', 'otsu', None,
+              'Determines the basic method that is used for thresholding. The '
+              'default is `otsu`, which implements and automatic threshold. '
+              'Alternatively, a number between 0 and 255 can be given, which '
+              'is then used directly.'),
     Parameter('cage/threshold_zscore', 0.5, UNIT.FACTOR,
               'Factor that determines the threshold for producing the binary '
               'image that is used to located the frame of the cage. The '
