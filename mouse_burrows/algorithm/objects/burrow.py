@@ -16,8 +16,8 @@ from scipy import cluster
 import shapely
 from shapely import geometry
 
-from utils.cache import cached_property
-from utils.data_structures import LazyHDFCollection
+from utils.data_structures.cache import cached_property
+from utils.data_structures.nested_dict import LazyHDFCollection
 from utils.math import trim_nan
 from video.analysis import curves, regions, shapes
 

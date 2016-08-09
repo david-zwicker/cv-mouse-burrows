@@ -12,7 +12,7 @@ import re
 import numpy as np
 from scipy.ndimage import filters
 
-from utils.data_structures import LazyHDFValue
+from utils.data_structures.nested_dict import LazyHDFValue
 from utils.math import contiguous_true_regions
 
 

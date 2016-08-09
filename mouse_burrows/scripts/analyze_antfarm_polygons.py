@@ -839,8 +839,8 @@ def main():
 
         # write the data to a csv file
         first_columns = ['experiment', 'burrow_id']
-        data_structures.save_dict_to_csv(table, args.result_csv,
-                                         first_columns=first_columns)
+        data_structures.misc.save_dict_to_csv(table, args.result_csv,
+                                              first_columns=first_columns)
 
 
 

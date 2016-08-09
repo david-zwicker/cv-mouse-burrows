@@ -17,7 +17,7 @@ import numpy as np
 
 from ..algorithm.parameters import PARAMETERS_DEFAULT
 from ..simple import load_result_file
-from utils.data_structures import NestedDict
+from utils.data_structures.nested_dict import NestedDict
 from utils.files import ensure_directory_exists
 from utils.files import MAIN_DIRECTORY as VIDEO_ANALYSIS_DIRECTORY
 

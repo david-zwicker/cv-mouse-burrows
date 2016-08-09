@@ -20,7 +20,7 @@ from shapely import geometry
 from ..algorithm import FirstPass, SecondPass, ThirdPass, FourthPass
 from .data_handler import DataHandler
 from .objects import mouse
-from utils.data_structures import OmniContainer
+from utils.data_structures.misc import OmniContainer
 from utils.math import contiguous_int_regions_iter, is_equidistant
 from external.kids_cache import cache
 from video.analysis import curves
