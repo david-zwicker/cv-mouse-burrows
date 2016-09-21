@@ -6,7 +6,7 @@
 #SBATCH -p {SLURM_PARTITION} # Partition to submit to
 #SBATCH --mem-per-cpu={PASS7/MEMORY}   # Memory per cpu in MB (see also --mem)
 #SBATCH -o {JOB_DIRECTORY}/log_cropped_video.txt    # File to which stdout and stderr will be written
-#SBATCH --job-name=U_{NAME}
+#SBATCH --job-name=V_{NAME}
 #SBATCH --mail-type=FAIL
 #SBATCH --mail-user={NOTIFICATION_EMAIL}
 
