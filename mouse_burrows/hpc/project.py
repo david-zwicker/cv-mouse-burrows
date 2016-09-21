@@ -17,9 +17,9 @@ import numpy as np
 
 from ..algorithm.parameters import PARAMETERS_DEFAULT
 from ..simple import load_result_file
+import video
 from utils.data_structures.nested_dict import NestedDict
-from utils.files import ensure_directory_exists
-from utils.files import MAIN_DIRECTORY as VIDEO_ANALYSIS_DIRECTORY
+from utils.files import ensure_directory_exists, get_module_path
 
 
 
@@ -200,11 +200,9 @@ class HPCProjectBase(object):
             add_python_paths = 'sys.path.extend([%s])' % paths_str
             # get the folder in which the current project resides
             add_python_paths = add_python_paths.replace(
-                                    '__video_analysis_path__',
-                                    os.path.abspath(VIDEO_ANALYSIS_DIRECTORY))
+                        '__video_analysis_path__', get_module_path(video))
             add_python_paths = add_python_paths.replace(
-                                    '__project_path__',
-                                    os.path.abspath(PROJECT_DIRECTORY))
+                        '__project_path__', os.path.abspath(PROJECT_DIRECTORY))
         else:
             add_python_paths = ''
         
