@@ -42,6 +42,9 @@ def main():
                         help='information that is displayed')
     parser.add_argument('-s', '--scale_bar', action='store_true', default=False,
                         help='displays a scale bar in the video')
+    parser.add_argument('-b', '--border_buffer', type=float, default=0,
+                        help='enlarge the cropping rectangle by the given '
+                             'length (in cm) in all directions.')
     
     # fetch the arguments and build the parameter list
     args = parser.parse_args()
@@ -49,7 +52,8 @@ def main():
     # create the video
     make_cropped_video(result_file=args.result_file,
                        output_video=args.output_file,
-                       display=args.display, scale_bar=args.scale_bar)
+                       display=args.display, scale_bar=args.scale_bar,
+                       border_buffer_cm=args.border_buffer)
     
 
 

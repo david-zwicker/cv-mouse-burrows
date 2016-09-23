@@ -20,7 +20,8 @@ from video.analysis.shapes import Rectangle
 
 
 def make_cropped_video(result_file, output_video=None,
-                           display='{time} [{frame}]', scale_bar=True):
+                       display='{time} [{frame}]', scale_bar=True,
+                       border_buffer_cm=0):
     """ main routine of the program
     `result_file` is the file where the results from the video analysis are
         stored. This is usually a *.yaml file
@@ -31,6 +32,8 @@ def make_cropped_video(result_file, output_video=None,
             {time} the current time stamp
             {frame} the current frame number
     `scale_bar` determines whether a scale bar is shown
+    `border_buffer_cm` sets the extra space (in units of cm) around the cropping
+        rectangle that is included in the analysis
     """
     logging.info('Analyze video `%s`', result_file)
     
@@ -43,8 +46,22 @@ def make_cropped_video(result_file, output_video=None,
     # crop the video to the cage
     video_input = analyzer.video
     cropping_cage = analyzer.data['pass1/video/cropping_cage']
+    
+    border_buffer_px = int(border_buffer_cm / analyzer.length_scale_mag)
+    
+    # change rectangle size if necessary
+    if border_buffer_px != 0:
+        cropping_rect = Rectangle.from_list(cropping_cage)
+        video_rect = Rectangle(0, 0, video_input.width, video_input.height)
+        
+        cropping_rect.buffer(border_buffer_px)
+        cropping_rect.intersect(video_rect)
+        cropping_cage = cropping_rect.to_list()
+    
     if cropping_cage:
-        video_input = FilterCrop(video_input, rect=cropping_cage)
+        # size_alignment=2 makes sure that the width and height are even numbers 
+        video_input = FilterCrop(video_input, rect=cropping_cage,
+                                 size_alignment=2)
     
     # determine the filename of the output video
     if output_video is None:
