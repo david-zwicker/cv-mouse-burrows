@@ -88,7 +88,7 @@ class Analyzer(DataHandler):
             frames_video[0] += adaptation_frames
             
         # get the frames that are chosen for analysis
-        frames_analysis = self.data['parameters/analysis/frames']
+        frames_analysis = list(self.data['parameters/analysis/frames'])
         if frames_analysis is None:
             frames_analysis = frames_video
         else:
@@ -101,7 +101,7 @@ class Analyzer(DataHandler):
             else:
                 frames_analysis[1] = min(frames_analysis[1], frames_video[1])
 
-        return frames_analysis
+        return int(frames_analysis[0]), int(frames_analysis[1])
     
     
     def get_frame_roi(self, frame_ids=None):
@@ -942,8 +942,11 @@ class Analyzer(DataHandler):
                         states_sliced = states[t_slice]
                         # find the speed where the mouse is in the right state
                         speed_in_state = speed_sliced[states_sliced == 0]
-                        # calculate the respective statistics
-                        res.append(stat_func(speed_in_state))
+                        if len(speed_in_state) == 0:
+                            res.append(np.nan)
+                        else: 
+                            # calculate the respective statistics
+                            res.append(stat_func(speed_in_state))
 #                     res = [stat_func(speed[t_slice]) for t_slice in frame_slices]
                     result[key + suffix] = np.array(res) * self.speed_scale
         
