@@ -220,6 +220,8 @@ class HPCProjectBase(object):
         # extract special parameters
         video_display_item = \
                         self.parameters['output/video/underground_display_item']
+        video_crop_border_buffer = \
+                        self.parameters['output/video/crop_border_buffer']
         
         # setup tracking parameters
         tracking_parameters = self.parameters.to_dict(flatten=True)
@@ -238,7 +240,8 @@ class HPCProjectBase(object):
                   'TRACKING_PARAMETERS': pprint.pformat(tracking_parameters),
                   'SPECIFIC_PARAMETERS': pprint.pformat(parameters),
                   'SCALE_LENGTH': scale_length,
-                  'VIDEO_DISPLAY_ITEM': video_display_item}
+                  'VIDEO_DISPLAY_ITEM': video_display_item,
+                  'VIDEO_CROP_BORDER_BUFFER': video_crop_border_buffer}
         
         # setup job resources
         resource_iter = self.parameters['resources'].iteritems(flatten=True)

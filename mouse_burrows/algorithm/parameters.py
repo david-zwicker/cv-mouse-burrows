@@ -199,6 +199,9 @@ PARAMETER_LIST = [
               'The data that is displayed in the underground video. '
               'Placeholders like `{time}` and `{frame}` are replaced by the '
               'data of the current frame.'),
+    Parameter('output/video/crop_border_buffer', 5, UNIT.LENGTH_CM,
+              'Size by which the cropping rectangle is extended when creating '
+              'a cropped movie.'),
     
     # Cage
     Parameter('cage/width_cm', 85.5, UNIT.LENGTH_CM,
