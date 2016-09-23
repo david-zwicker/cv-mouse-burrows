@@ -42,6 +42,7 @@ class ProjectSingleSlurm(HPCProjectBase):
                  2: ['pass2_slurm.sh', 'pass2_single.py'],
                  3: ['pass3_slurm.sh', 'pass3_single.py'],
                  4: ['pass4_slurm.sh', 'pass4_single.py'],
+                 7: ['make_cropped_video.sh'],
                  8: ['make_underground_videos.sh'],
                  9: ['make_underground_video.sh']}
     files_cleanup = {0: ['log_copy_video_*.txt'],
@@ -49,6 +50,7 @@ class ProjectSingleSlurm(HPCProjectBase):
                      2: ['pass2_job_id.txt', 'status_pass2.yaml', 'log_pass2*'],
                      3: ['pass3_job_id.txt', 'status_pass3.yaml', 'log_pass3*'],
                      4: ['pass4_job_id.txt', 'status_pass4.yaml', 'log_pass4*'],
+                     7: ['log_cropped_video_*.txt'],
                      8: ['log_underground_videos_*.txt'],
                      9: ['log_underground_video_*.txt']}
     

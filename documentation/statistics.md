@@ -2,16 +2,16 @@
 
 ## Time period statistics
 These are statistics that can be calculated for any time period of the video.
-Typically, we calculate the statistics for time slices of half an hour to see the
-development over time. Additionally, these statistics can be calculated for
+Typically, we calculate the statistics for time slices of half an hour to see
+the development over time. Additionally, these statistics can be calculated for
 the entire video.
 For each period, the following statistics can be calculated:
 
 * `burrow_area_excavated`: The underground area that has been excavated during
     the given time period. This value is the difference of the areas of burrows
     between the start and the end of the time period.   
-* `ground_removed`: The area of the region which was below the ground line in the
-    first frame and is now above ground in the last frame.
+* `ground_removed`: The area of the region which was below the ground line in
+    the first frame and is now above ground in the last frame.
 * `ground_accrued`: The area of the region which was above the ground line in
     the first frame and is now below ground in the last frame.
 * `time_burrow_grew`: The total time during which the burrow area grew. This is
@@ -30,9 +30,9 @@ For each period, the following statistics can be calculated:
 * `mouse_speed_mean`: The mean speed of the mouse during the analysis period.
     Here, we assume a speed of zero for periods where we could not detect the
     mouse.
-* `mouse_speed_mean_valid`: The mean speed of the mouse during the analysis period.
-    The difference to the value above is that we here only included periods in
-    which we could actually detect the mouse.
+* `mouse_speed_mean_valid`: The mean speed of the mouse during the analysis
+    period. The difference to the value above is that we here only included
+    periods in which we could actually detect the mouse.
 * `mouse_speed_max`: The maximal speed the mouse attained during the analysis
     period.
 * `mouse_distance_covered`: The total distance the mouse covered over the
@@ -49,6 +49,19 @@ For each period, the following statistics can be calculated:
     on the ground line that is directly above it, irrespective of any burrows.
 * `mouse_digging_rate`: The rate of digging during the time period. This value
     is calculated by dividing `burrow_area_excavated` by `time_at_burrow_end`.
+    
+There are also more detailed statistics, which are conditioned on the location
+of the mouse. Here, the curly brackets give the alternatives that are allowed
+for a given statistics:
+* `time_spent_{aboveground|underground}`: This gives the time spent in the
+    location `aboveground` or `underground`.
+* `time_spent_moving_{aboveground|underground}`: This gives the time spent
+    moving in the location `aboveground` or `underground`.
+* `mouse_speed_{mean|mean_valid|max}_{aboveground|underground}`: This gives the
+    speed statistics `speed_mean`, `speed_mean_valid`, or `speed_max` calculated
+    for the period where the mouse is in the location `aboveground` or
+    `underground`.
+
     
 Additionally, we save information about what time slice was actually analyzed:
 

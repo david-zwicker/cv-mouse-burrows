@@ -32,6 +32,7 @@ sys.path.append(project_path)
 from mouse_burrows.algorithm.objects import Burrow, GroundProfile
 from video.analysis import curves, image, regions, shapes
 from utils import data_structures, math
+from utils.files import ensure_directory_exists
 
 from video import debug  # @UnusedImport
 
@@ -780,6 +781,9 @@ def main():
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
 
+    if args.folder:
+        ensure_directory_exists(args.folder)
+
     if args.load_pkl:
         # load file from pickled data
         logging.info('Loading data from file `%s`.' % args.load_pkl)
@@ -835,8 +839,8 @@ def main():
 
         # write the data to a csv file
         first_columns = ['experiment', 'burrow_id']
-        data_structures.save_dict_to_csv(table, args.result_csv,
-                                         first_columns=first_columns)
+        data_structures.misc.save_dict_to_csv(table, args.result_csv,
+                                              first_columns=first_columns)
 
 
 

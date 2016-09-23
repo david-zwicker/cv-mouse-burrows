@@ -22,10 +22,10 @@ except ImportError:
 import objects
 from .parameters import PARAMETERS, PARAMETERS_DEFAULT, UNIT, scale_parameters
 from utils.files import change_directory, ensure_directory_exists
-from utils.data_structures import (LazyNestedDict, LazyHDFValue,
-                                   prepare_data_for_yaml)
+from utils.data_structures.nested_dict import (LazyNestedDict, LazyHDFValue,
+                                               prepare_data_for_yaml)
 from utils.misc import get_loglevel_from_name
-from utils.cache import cached_property
+from utils.data_structures.cache import cached_property
 from video.io import load_any_video
 from video.filters import FilterCrop, FilterMonochrome, FilterRotate
 
@@ -254,7 +254,7 @@ class DataHandler(object):
     
     
     def load_video(self, video=None, crop_video=True, cropping_rect=None,
-                   frames_skipped_in_this_pass=0):
+                   frames_skipped_in_this_pass=0, frames=None):
         """ loads the video and applies a monochrome and cropping filter """
         video_parameters = self.data['parameters/video/video_parameters']
         
@@ -288,7 +288,8 @@ class DataHandler(object):
         self.data['video/filename_pattern'] = video_filename_pattern 
 
         # restrict the analysis to an interval of frames
-        frames = self.data.get('parameters/video/frames', None)
+        if frames is None:
+            frames = self.data.get('parameters/video/frames', None)
         
         # check whether frames are given
         if frames is None:

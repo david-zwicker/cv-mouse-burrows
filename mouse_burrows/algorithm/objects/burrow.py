@@ -16,8 +16,8 @@ from scipy import cluster
 import shapely
 from shapely import geometry
 
-from utils.cache import cached_property
-from utils.data_structures import LazyHDFCollection
+from utils.data_structures.cache import cached_property
+from utils.data_structures.nested_dict import LazyHDFCollection
 from utils.math import trim_nan
 from video.analysis import curves, regions, shapes
 
@@ -512,6 +512,11 @@ class BurrowTrack(object):
     def track_start(self): return self.times[0]
     @property
     def track_end(self): return self.times[-1]
+    
+    
+    def exists_at_time(self, time):
+        """ returns true if the burrow existed at the given time """
+        return self.times[0] <= time <= self.times[-1]
     
     
     def get_max_length(self):

@@ -302,9 +302,14 @@ class FirstPass(PassBase):
         """ analyzes a single _frame and locates the mouse cage in it.
         Try to find a bounding box for the cage.
         The rectangle [top, left, height, width] enclosing the cage is returned. """
-        # do automatic thresholding to find large, bright areas
-        _, binarized_frame = cv2.threshold(frame, 0, 255,
-                                           cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        # do basic thresholding to find large, bright areas
+        threshold_method = self.params['cage/threshold_basic']
+        if threshold_method == 'otsu':
+            _, binarized_frame = cv2.threshold(frame, 0, 255,
+                                               cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        else:
+            _, binarized_frame = cv2.threshold(frame, int(threshold_method), 255,
+                                               cv2.THRESH_BINARY)
 
         if self.params['cage/restrict_to_largest_patch']:
             # find the largest bright are, which should contain the cage

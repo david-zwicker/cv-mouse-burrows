@@ -20,7 +20,7 @@ from shapely import geometry
 from ..algorithm import FirstPass, SecondPass, ThirdPass, FourthPass
 from .data_handler import DataHandler
 from .objects import mouse
-from utils.data_structures import OmniContainer
+from utils.data_structures.misc import OmniContainer
 from utils.math import contiguous_int_regions_iter, is_equidistant
 from external.kids_cache import cache
 from video.analysis import curves
@@ -1069,14 +1069,25 @@ class Analyzer(DataHandler):
             length_max, length_total, area_total = 0, 0, 0
             burrow_tracks = self._get_burrow_tracks()
             if burrow_tracks:
-                last_time = max(bt.track_end for bt in burrow_tracks)
-                # gather burrow statistics
+                # determine the time at which we analyze the burrow
+                time_burrows_end = max(bt.track_end for bt in burrow_tracks)
+                time_max = self.get_frame_range()[1]
+                time_analyze = min(time_burrows_end, time_max)
+                
+                # gather statistics for all burrows 
                 for bt in burrow_tracks:
-                    if bt.track_end == last_time:
-                        length_total += bt.last.length
-                        if bt.last.length > length_max:
-                            length_max = bt.last.length
-                        area_total += bt.last.area
+                    try:
+                        # get the burrow at the time of analysis
+                        burrow = bt.get_burrow(time_analyze)
+                    except IndexError:
+                        # that burrow doesn't exist at this time
+                        pass
+                    else:
+                        # determine the burrow statistics
+                        burrow_length = burrow.length
+                        length_max = max(length_max, burrow_length) 
+                        length_total += burrow_length
+                        area_total += burrow.area
                         
             # correct for predug
             predug = self.get_burrow_predug()

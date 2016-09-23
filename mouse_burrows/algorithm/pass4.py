@@ -20,7 +20,8 @@ from shapely import geometry
 from .pass_base import PassBase
 from .objects.burrow import Burrow, BurrowTrackList
 from utils.misc import unique_based_on_id, display_progress
-from utils.math import NormalDistribution, contiguous_true_regions
+from utils.math.distributions import NormalDistribution
+from utils.math import contiguous_true_regions
 from video.analysis import curves, regions
 from video.analysis.active_contour import ActiveContour
 from video.io import ImageWindow, VideoFile, VideoComposer

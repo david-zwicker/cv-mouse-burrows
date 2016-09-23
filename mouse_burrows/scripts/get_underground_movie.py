@@ -39,8 +39,7 @@ def main():
     parser.add_argument('-o', '--output_file', metavar='FILE',
                         type=str, default=None,
                         help='filename of the output video [optional]')
-    parser.add_argument('-d', '--display', type=str,
-                        choices=['none', 'frame', 'time'], default='time',
+    parser.add_argument('-d', '--display', type=str, default='{time}',
                         help='information that is displayed')
     parser.add_argument('-s', '--scale_bar', action='store_true', default=False,
                         help='displays a scale bar in the video')
