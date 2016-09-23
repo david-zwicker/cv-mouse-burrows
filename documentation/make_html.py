@@ -21,7 +21,7 @@ from collections import OrderedDict
 import grip
 
 from mouse_burrows.algorithm.parameters import PARAMETER_LIST, UNIT
-from utils.data_structures import NestedDict
+from utils.data_structures.nested_dict import NestedDict
 
 
 def create_parameter_summary(outfile):

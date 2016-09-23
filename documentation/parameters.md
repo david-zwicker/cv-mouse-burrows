@@ -60,6 +60,7 @@ cage
 * `cage/rectangle_buffer = 5`: Margin by which the estimated cage rectangle is enlarged before it is located by fitting.
 * `cage/refine_by_fitting = True`: Flag determining whether the cage rectangle should be refined by using fitting to locate the cage boundaries.
 * `cage/restrict_to_largest_patch = True`: Determines whether the cage analysis will be restricted to the largest patch in the first thresholded image.
+* `cage/threshold_basic = otsu`: Determines the basic method that is used for thresholding. The default is `otsu`, which implements and automatic threshold. Alternatively, a number between 0 and 255 can be given, which is then used directly.
 * `cage/threshold_zscore = 0.5`: Factor that determines the threshold for producing the binary image that is used to located the frame of the cage. The threshold is calculated according to the formula thresh = img_mean - factor*img_std, where factor is the factordetermined here.
 * `cage/width_cm = 85.5`: Measured width of the cages/antfarms. The width is measured inside the cage, not including the frame.
 * `cage/width_max = 800`: Maximal width of the cage. This is only used to make a plausibility test of the results
@@ -128,6 +129,7 @@ output
 * `output/hdf5_compression = gzip`: Compression algorithm to be used for the HDF5 data. Possible options might be None, "gzip", "lzf", and "szip".
 * `output/output_period = 1`: How often are frames written to the output file or shown on the screen
 * `video`
+  * `output/video/crop_border_buffer = 5`: Size by which the cropping rectangle is extended when creating a cropped movie.
   * `output/video/folder_underground = results/underground_video/`: Folder to which the underground video is written
   * `output/video/extension = .mov`: File extension used for debug videos
   * `output/video/underground_video_length = 36000`: Typical length of the underground video in number of frames
@@ -186,6 +188,11 @@ resources
   * `resources/pass4/memory = 2000`: Maximal RAM per core for pass 4 [in MB]
   * `resources/pass4/job_id = None`: Job id of pass 4
   * `resources/pass4/time = 1500`: Maximal computation minutes for pass 4
+* `pass7`
+  * `resources/pass7/cores = 2`: Number of cores for pass 7
+  * `resources/pass7/memory = 2000`: Maximal RAM per core for pass 7 [in MB]
+  * `resources/pass7/job_id = None`: Job id of pass 7
+  * `resources/pass7/time = 3000`: Maximal computation minutes for pass 7
 * `pass9`
   * `resources/pass9/cores = 2`: Number of cores for pass 9
   * `resources/pass9/memory = 2000`: Maximal RAM per core for pass 9 [in MB]
