@@ -45,15 +45,28 @@ def main():
     parser.add_argument('-b', '--border_buffer', type=float, default=0,
                         help='enlarge the cropping rectangle by the given '
                              'length (in cm) in all directions.')
+    parser.add_argument('-c', '--time_compression', type=float, default=1,
+                        help='factor that determines how many frames are '
+                             'dropped to compress video')
+    parser.add_argument('-t', '--time_duration', type=float, default=-1,
+                        help='maximal number of seconds the produced video is '
+                             'going to cover. Negative inputs indicate that '
+                             'the full video is used.')
     
     # fetch the arguments and build the parameter list
     args = parser.parse_args()
+    
+    time_duration = args.time_duration
+    if time_duration < 0:
+        time_duration = None
     
     # create the video
     make_cropped_video(result_file=args.result_file,
                        output_video=args.output_file,
                        display=args.display, scale_bar=args.scale_bar,
-                       border_buffer_cm=args.border_buffer)
+                       border_buffer_cm=args.border_buffer,
+                       time_compression=args.time_compression,
+                       time_duration=time_duration)
     
 
 

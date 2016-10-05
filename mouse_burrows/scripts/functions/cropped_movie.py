@@ -13,7 +13,7 @@ import logging
 import numpy as np
 
 from ...simple import load_result_file
-from video.filters import FilterCrop
+from video.filters import FilterCrop, FilterDropFrames
 from video.io import VideoComposer
 from video.analysis.shapes import Rectangle
 
@@ -21,7 +21,8 @@ from video.analysis.shapes import Rectangle
 
 def make_cropped_video(result_file, output_video=None,
                        display='{time} [{frame}]', scale_bar=True,
-                       border_buffer_cm=0):
+                       border_buffer_cm=0, time_compression=1,
+                       time_duration=None):
     """ main routine of the program
     `result_file` is the file where the results from the video analysis are
         stored. This is usually a *.yaml file
@@ -34,6 +35,10 @@ def make_cropped_video(result_file, output_video=None,
     `scale_bar` determines whether a scale bar is shown
     `border_buffer_cm` sets the extra space (in units of cm) around the cropping
         rectangle that is included in the analysis
+    `time_compression` sets the compression factor that determines how many
+        frames are dropped compared to the original video
+    `time_duration` sets the maximal number of seconds the video is supposed to
+        last. Additional frames will not be written.
     """
     logging.info('Analyze video `%s`', result_file)
     
@@ -62,6 +67,14 @@ def make_cropped_video(result_file, output_video=None,
         # size_alignment=2 makes sure that the width and height are even numbers 
         video_input = FilterCrop(video_input, rect=cropping_cage,
                                  size_alignment=2)
+        
+    if time_compression is not None and time_compression != 1:
+        video_input = FilterDropFrames(video_input,
+                                       compression=time_compression)
+        
+    if time_duration is not None:
+        index_max = int(time_duration * video_input.fps)
+        video_input = video_input[:index_max]
     
     # determine the filename of the output video
     if output_video is None:

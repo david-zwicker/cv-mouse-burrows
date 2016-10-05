@@ -22,6 +22,8 @@ cd {JOB_DIRECTORY}
 ~/Code/cv-mouse-burrows/mouse_burrows/scripts/get_cropped_movie.py \
     --result_file {JOB_DIRECTORY}/{NAME}_results.yaml \
     --display="{VIDEO_DISPLAY_ITEM}" \
-    --border_buffer={VIDEO_CROP_BORDER_BUFFER}
+    --border_buffer={VIDEO_CROP_BORDER_BUFFER} \ 
+    --time_compression={VIDEO_CROP_TIME_COMPRESSION} \
+    --time_duration={VIDEO_CROP_TIME_DURATION}
 
 echo "Ended job with id $SLURM_JOB_ID"

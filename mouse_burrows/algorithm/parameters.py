@@ -202,6 +202,14 @@ PARAMETER_LIST = [
     Parameter('output/video/crop_border_buffer', 5, UNIT.LENGTH_CM,
               'Size by which the cropping rectangle is extended when creating '
               'a cropped movie.'),
+    Parameter('output/video/crop_time_compression', 1, UNIT.FACTOR,
+              'Factor that determines how many frames are dropped to compress '
+              'the cropped video. For example, a factor of 2 drops every other '
+              'frame.'),
+    Parameter('output/video/crop_time_duration', -1, UNIT.TIME_SECONDS,
+              'Number of seconds the output video should last at maximum. '
+              'Negative numbers indicate that the video is not cut and thus '
+              'all available data is used.'),
     
     # Cage
     Parameter('cage/width_cm', 85.5, UNIT.LENGTH_CM,
