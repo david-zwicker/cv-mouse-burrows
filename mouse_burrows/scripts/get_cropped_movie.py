@@ -42,13 +42,16 @@ def main():
                         help='information that is displayed')
     parser.add_argument('-s', '--scale_bar', action='store_true', default=False,
                         help='displays a scale bar in the video')
-    parser.add_argument('-b', '--border_buffer', type=float, default=0,
+    parser.add_argument('-b', '--border_buffer', metavar='CM',
+                        type=float, default=0,
                         help='enlarge the cropping rectangle by the given '
                              'length (in cm) in all directions.')
-    parser.add_argument('-c', '--time_compression', type=float, default=1,
+    parser.add_argument('-c', '--time_compression', metavar='FACTOR',
+                        type=float, default=1,
                         help='factor that determines how many frames are '
                              'dropped to compress video')
-    parser.add_argument('-t', '--time_duration', type=float, default=-1,
+    parser.add_argument('-t', '--time_duration', metavar='SECONDS',
+                        type=float, default=-1,
                         help='maximal number of seconds the produced video is '
                              'going to cover. Negative inputs indicate that '
                              'the full video is used.')
