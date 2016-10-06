@@ -46,7 +46,7 @@ def main():
                         type=float, default=0,
                         help='enlarge the cropping rectangle by the given '
                              'length (in cm) in all directions.')
-    parser.add_argument('-c', '--time_compression', metavar='FACTOR',
+    parser.add_argument('-c', '--frame_compression', metavar='FACTOR',
                         type=float, default=1,
                         help='factor that determines how many frames are '
                              'dropped to compress video')
@@ -68,7 +68,7 @@ def main():
                        output_video=args.output_file,
                        display=args.display, scale_bar=args.scale_bar,
                        border_buffer_cm=args.border_buffer,
-                       time_compression=args.time_compression,
+                       frame_compression=args.frame_compression,
                        time_duration=time_duration)
     
 

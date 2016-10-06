@@ -21,7 +21,7 @@ from video.analysis.shapes import Rectangle
 
 def make_cropped_video(result_file, output_video=None,
                        display='{time} [{frame}]', scale_bar=True,
-                       border_buffer_cm=0, time_compression=1,
+                       border_buffer_cm=0, frame_compression=1,
                        time_duration=None):
     """ main routine of the program
     `result_file` is the file where the results from the video analysis are
@@ -35,7 +35,7 @@ def make_cropped_video(result_file, output_video=None,
     `scale_bar` determines whether a scale bar is shown
     `border_buffer_cm` sets the extra space (in units of cm) around the cropping
         rectangle that is included in the analysis
-    `time_compression` sets the compression factor that determines how many
+    `frame_compression` sets the compression factor that determines how many
         frames are dropped compared to the original video
     `time_duration` sets the maximal number of seconds the video is supposed to
         last. Additional frames will not be written.
@@ -68,9 +68,9 @@ def make_cropped_video(result_file, output_video=None,
         video_input = FilterCrop(video_input, rect=cropping_cage,
                                  size_alignment=2)
         
-    if time_compression is not None and time_compression != 1:
+    if frame_compression is not None and frame_compression != 1:
         video_input = FilterDropFrames(video_input,
-                                       compression=time_compression)
+                                       compression=frame_compression)
         
     if time_duration is not None:
         index_max = int(time_duration * video_input.fps)
