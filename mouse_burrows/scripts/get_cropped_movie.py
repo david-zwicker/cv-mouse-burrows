@@ -55,6 +55,8 @@ def main():
                         help='maximal number of seconds the produced video is '
                              'going to cover. Negative inputs indicate that '
                              'the full video is used.')
+    parser.add_argument('-p', '--progress', action='store_true',
+                        help='Displays progress')
     
     # fetch the arguments and build the parameter list
     args = parser.parse_args()
@@ -69,7 +71,8 @@ def main():
                        display=args.display, scale_bar=args.scale_bar,
                        border_buffer_cm=args.border_buffer,
                        frame_compression=args.frame_compression,
-                       time_duration=time_duration)
+                       time_duration=time_duration,
+                       progress=args.progress)
     
 
 
