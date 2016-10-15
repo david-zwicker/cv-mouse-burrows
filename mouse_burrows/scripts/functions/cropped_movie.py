@@ -13,6 +13,7 @@ import logging
 import numpy as np
 
 from ...simple import load_result_file
+from utils.misc import display_progress
 from video.filters import FilterCrop, FilterDropFrames
 from video.io import VideoComposer
 from video.analysis.shapes import Rectangle
@@ -22,7 +23,7 @@ from video.analysis.shapes import Rectangle
 def make_cropped_video(result_file, output_video=None,
                        display='{time} [{frame}]', scale_bar=True,
                        border_buffer_cm=0, frame_compression=1,
-                       time_duration=None):
+                       time_duration=None, progress=True):
     """ main routine of the program
     `result_file` is the file where the results from the video analysis are
         stored. This is usually a *.yaml file
@@ -39,6 +40,7 @@ def make_cropped_video(result_file, output_video=None,
         frames are dropped compared to the original video
     `time_duration` sets the maximal number of seconds the video is supposed to
         last. Additional frames will not be written.
+    `progress` flag that determines whether the progress is displayed
     """
     logging.info('Analyze video `%s`', result_file)
     
@@ -110,6 +112,9 @@ def make_cropped_video(result_file, output_video=None,
     scale_bar_size_px = np.round(scale_bar_size_cm / pixel_size_cm)
     scale_bar_rect = Rectangle(30, 50, scale_bar_size_px, 5)
     scale_bar_pos = (30 + scale_bar_size_px//2, 30)
+    
+    if progress:
+        video_input = display_progress(video_input)
     
     for frame_id, frame in enumerate(video_input):
         video_output.set_frame(frame, copy=True)
