@@ -92,11 +92,13 @@ def make_cropped_video(result_file, output_video=None,
     
     # create the video writer
     video_codec = analyzer.params['output/video/codec']
-    video_bitrate = analyzer.params['output/video/bitrate']
+    video_bitrate = analyzer.params['output/video/crop_bitrate']
+    if video_bitrate is None:
+        video_bitrate = analyzer.params['output/video/bitrate']
     fps = video_input.fps
     video_output = VideoComposer(
-        output_video, size=video_input.size, fps=fps, is_color=False,
-        codec=video_codec, bitrate=video_bitrate,
+        output_video, size=video_input.size, fps=fps,
+        is_color=video_input.is_color, codec=video_codec, bitrate=video_bitrate,
     )
     
     # time label position

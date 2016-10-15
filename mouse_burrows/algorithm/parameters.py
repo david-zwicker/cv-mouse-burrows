@@ -210,6 +210,9 @@ PARAMETER_LIST = [
               'Number of seconds the output video should last at maximum. '
               'Negative numbers indicate that the video is not cut and thus '
               'all available data is used.'),
+    Parameter('output/video/crop_bitrate', '1000k', None,
+              'Bitrate used for cropped video videos. If None is given, the '
+              'bitrate given in `output/video/bitrate` will be used.'),
     
     # Cage
     Parameter('cage/width_cm', 85.5, UNIT.LENGTH_CM,
@@ -645,7 +648,7 @@ PARAMETER_LIST = [
     Parameter('resources/pass9/cores', 2, UNIT.INTEGER,
               'Number of cores for pass 9'),
     Parameter('resources/pass9/job_id', None, None, 'Job id of pass 9'),              
-    Parameter('resources/pass9/time', 2*24*60, None,
+    Parameter('resources/pass9/time', 3*24*60, None,
               'Maximal computation minutes for pass 9'),
     Parameter('resources/pass9/memory', 2000, None,
               'Maximal RAM per core for pass 9 [in MB]'),
