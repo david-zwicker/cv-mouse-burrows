@@ -640,7 +640,7 @@ PARAMETER_LIST = [
     Parameter('resources/pass7/cores', 2, UNIT.INTEGER,
               'Number of cores for pass 7'),
     Parameter('resources/pass7/job_id', None, None, 'Job id of pass 7'),              
-    Parameter('resources/pass7/time', 7*24*60, None,
+    Parameter('resources/pass7/time', 10*24*60, None,
               'Maximal computation minutes for pass 7'),
     Parameter('resources/pass7/memory', 2000, None,
               'Maximal RAM per core for pass 7 [in MB]'),
