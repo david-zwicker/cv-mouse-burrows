@@ -24,7 +24,8 @@ def make_cropped_video(result_file, output_video=None,
                        display='{time} [{frame}]', scale_bar=True,
                        border_buffer_cm=0, frame_compression=1,
                        time_duration=None, progress=True):
-    """ main routine of the program
+    """ function that crops a video to an antfarm.
+    
     `result_file` is the file where the results from the video analysis are
         stored. This is usually a *.yaml file
     `output_video` denotes the filename where the result video should be

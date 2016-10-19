@@ -16,7 +16,7 @@ import yaml
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ..simple import load_result_file
+from mouse_burrows.simple import load_result_file
 from video.analysis import curves
 
 
