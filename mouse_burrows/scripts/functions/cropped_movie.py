@@ -60,7 +60,8 @@ def make_cropped_video(result_file, output_video=None,
     # change rectangle size if necessary
     if border_buffer_px != 0:
         cropping_rect = Rectangle.from_list(cropping_cage)
-        video_rect = Rectangle(0, 0, video_input.width, video_input.height)
+        video_rect = Rectangle(0, 0, video_input.width - 1,
+                               video_input.height - 1)
         
         cropping_rect.buffer(border_buffer_px)
         cropping_rect.intersect(video_rect)
