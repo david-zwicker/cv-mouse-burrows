@@ -420,7 +420,7 @@ class AntfarmShapes(object):
         """ load burrow polygons from an image """
         # get the skeleton of the image
         mask = image.mask_thinning(mask, method='guo-hall')
-
+        
         # get the path between the two points in the mask that are farthest
         points = regions.get_farthest_points(mask, ret_path=True)
 
@@ -542,6 +542,9 @@ class AntfarmShapes(object):
             w = self.params['colors/isolation_closing_radius'] - dilate
             kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2*w + 1, 2*w + 1))
         mask = cv2.erode(mask_dilated, kernel)
+
+        # make sure nothing touches the border
+        image.set_image_border(mask, size=1, color=0)
 
         return mask
 
