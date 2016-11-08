@@ -51,13 +51,13 @@ class GroundProfile(object):
         return len(self._points)
         
         
-    @cached_property
+    @cached_property()
     def length(self):
         """ returns the length of the profile """
         return curves.curve_length(self.points)
     
 
-    @cached_property
+    @cached_property()
     def linestring(self):
         """ returns a shapely line string corresponding to the ground """
         return geometry.LineString(self.points)
@@ -114,13 +114,13 @@ class GroundProfile(object):
         self.points = curves.make_curve_equidistant(self.points, **kwargs)
 
 
-    @cached_property
+    @cached_property()
     def midline(self):
         """ returns the average y-value along the profile """
         return np.mean(self.points[:, 1])
 
 
-    @cached_property
+    @cached_property()
     def interpolator(self):
         return Interpolate_1D_Extrapolated(self._points[:, 0],
                                            self._points[:, 1],

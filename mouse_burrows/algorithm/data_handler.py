@@ -352,7 +352,7 @@ class DataHandler(object):
         return video_info
 
 
-    @cached_property
+    @cached_property()
     def data_lastmodified(self):
         """ returns the time at which the data was last modified """
         # try reading the time stamp from the data

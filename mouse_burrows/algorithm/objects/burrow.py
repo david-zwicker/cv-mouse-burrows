@@ -285,7 +285,7 @@ class Burrow(shapes.Polygon):
         return graph
     
     
-    @cached_property
+    @cached_property()
     def segment_lengths(self):
         """ returns the lengths of all the segments """
         lengths =  np.hypot(self.centerline[1:, 0] - self.centerline[:-1, 0],
@@ -303,7 +303,7 @@ class Burrow(shapes.Polygon):
             self.centerline = other.centerline
 
 
-    @cached_property
+    @cached_property()
     def linestring(self):
         if self.centerline is None or len(self.centerline) < 2:
             return geometry.LineString()

@@ -82,7 +82,7 @@ class ObjectTrack(object):
         return itertools.izip(self.times, self.objects)
 
     
-    @cached_property
+    @cached_property()
     def mouse_score(self):
         """ return a score of how likely this trace represents a mouse
         The returned value ranges from 0 to 1
