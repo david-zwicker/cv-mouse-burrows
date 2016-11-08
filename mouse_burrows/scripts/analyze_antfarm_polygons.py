@@ -46,7 +46,7 @@ default_parameters = {
     'burrow/branch_point_separation': 100,
     'burrow/angle_measurement_distance_cm': 8,
     'cage/width_norm': 85.5,
-    'cage/width_min': 70,
+    'cage/width_min': 60,
     'cage/width_max': 110,
     'colors/burrow': (1, 1, 0),      #< burrow color in RGB
     'colors/ground_line': (0, 1, 0), #< ground line color in RGB
