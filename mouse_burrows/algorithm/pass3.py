@@ -798,7 +798,7 @@ class ThirdPass(PassBase):
                     # merge the burrows
                     burrow.merge(burrow_last)
                         
-            # keep the burrow parts that are below the ground line
+            # only keep the burrow parts that are below the ground line
             try:
                 polygon = burrow.polygon.intersection(ground_polygon)
             except geos.TopologicalError:
@@ -814,9 +814,8 @@ class ThirdPass(PassBase):
                 continue
             
             # make sure that the burrow centerline lies within the ground region
-            ground_poly = geometry.Polygon(self.get_ground_polygon_points())
             if burrow.linestring.length > 0:
-                line = burrow.linestring.intersection(ground_poly)
+                line = burrow.linestring.intersection(ground_polygon)
             else:
                 line = None
             
@@ -829,8 +828,12 @@ class ThirdPass(PassBase):
             if not is_line or line.is_empty or line.length <= 1:
                 # the centerline disappeared
                 # => calculate a new centerline from the burrow contour
-                end_point = self.burrow_estimate_exit(burrow)[0]
-                self.calculate_burrow_centerline(burrow, point_start=end_point)
+                end_points = self.burrow_estimate_exit(burrow)
+                if end_points:
+                    self.calculate_burrow_centerline(burrow,
+                                                     point_start=end_points[0])
+                else:
+                    burrow.centerline = []
             
             else:
                 # adjust the burrow centerline to reach to the ground line
