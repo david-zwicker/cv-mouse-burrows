@@ -253,7 +253,7 @@ class Burrow(shapes.Polygon):
         if points is None:
             self._centerline = None
         else:
-            self._centerline = np.array(points, np.double)
+            self._centerline = np.atleast_2d(np.array(points, np.double))
             self.length = curves.curve_length(self._centerline)
         self._cache = {}
         

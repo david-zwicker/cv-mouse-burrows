@@ -833,7 +833,7 @@ class ThirdPass(PassBase):
                     self.calculate_burrow_centerline(burrow,
                                                      point_start=end_points[0])
                 else:
-                    burrow.centerline = []
+                    burrow.centerline = None
             
             else:
                 # adjust the burrow centerline to reach to the ground line
