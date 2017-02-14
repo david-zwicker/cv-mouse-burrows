@@ -829,7 +829,7 @@ class ThirdPass(PassBase):
                 # the centerline disappeared
                 # => calculate a new centerline from the burrow contour
                 end_points = self.burrow_estimate_exit(burrow)
-                if end_points:
+                if end_points is not None and len(end_points) > 0:
                     self.calculate_burrow_centerline(burrow,
                                                      point_start=end_points[0])
                 else:
