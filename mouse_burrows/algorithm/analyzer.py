@@ -503,7 +503,10 @@ class Analyzer(DataHandler):
                                           cval=0, output=speed)
         
         # determine the time point of the maximal rate
-        return np.argmax(speed) * window * self.time_scale
+        if len(speed) > 0:
+            return np.argmax(speed) * window * self.time_scale
+        else:
+            return np.nan
 
 
     def get_mouse_state_vector(self, states=None, ret_states=False):
@@ -967,8 +970,11 @@ class Analyzer(DataHandler):
 
         if 'mouse_trail_longest' in keys:
             ground_dist = self.get_mouse_track_data('ground_dist')
-            dist = [-np.nanmin(ground_dist[t_slice])
-                    for t_slice in frame_slices]
+            dist = np.full(len(frame_slices), np.nan)
+            for i, t_slice in enumerate(frame_slices):
+                ground_dist_slice = ground_dist[t_slice]
+                if len(ground_dist_slice) > 0:
+                    dist[i] = -np.nanmin(ground_dist_slice)
             result['mouse_trail_longest'] = dist * self.length_scale
             
         if 'mouse_deepest_diagonal' in keys or 'mouse_deepest_vertical' in keys:
