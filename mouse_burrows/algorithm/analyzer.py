@@ -309,8 +309,13 @@ class Analyzer(DataHandler):
             return None
         times = burrow_track.times
         assert is_equidistant(times)
-        # time delta is the duration after which we update the burrow data 
-        time_delta = (times[-1] - times[0])/(len(times) - 1)
+        
+        # time delta is the duration after which we update the burrow data
+        if len(times) > 1: 
+            time_delta = (times[-1] - times[0])/(len(times) - 1)
+        else:
+            # this is a weird 1-frame burrow
+            time_delta = 1
 
         # ignore the initial frames
         ignore_interval = self.params['burrows/activity_ignore_interval']
