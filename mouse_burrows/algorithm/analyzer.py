@@ -340,11 +340,17 @@ class Analyzer(DataHandler):
         ndimage.filters.gaussian_filter1d(areas, sigma, mode='nearest',
                                           output=areas)
         
-        # calculate the rate of area increase
-        area_rate = np.gradient(areas)
+        try:
+            # calculate the rate of area increase
+            area_rate = np.gradient(areas)
+        except ValueError:
+            # this can happen if len(areas) < 2
+            peak_activity = np.nan
+        else:
+            # determine the time point of the maximal rate
+            peak_activity = times[np.argmax(area_rate)] 
          
-        # determine the time point of the maximal rate
-        return times[np.argmax(area_rate)] * self.time_scale
+        return peak_activity * self.time_scale
     
     
     def get_burrow_growth_statistics(self, frames=None):
