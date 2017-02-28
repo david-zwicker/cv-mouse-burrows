@@ -506,7 +506,7 @@ class Analyzer(DataHandler):
         if len(speed) > 0:
             return np.argmax(speed) * window * self.time_scale
         else:
-            return np.nan
+            return np.nan * self.time_scale
 
 
     def get_mouse_state_vector(self, states=None, ret_states=False):
