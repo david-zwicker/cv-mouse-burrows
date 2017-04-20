@@ -100,7 +100,7 @@ class AntfarmShapes(object):
 
         # determine which loader to use for the individual files
         if ext == '.jpg' or ext == '.png':
-            logging.debug('Use OpenCV image loader')
+            logging.debug('Use OpenCV image loader to read file `%s`', path)
 
             img = cv2.imread(path)
             obj.image = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) #< convert to RGB
