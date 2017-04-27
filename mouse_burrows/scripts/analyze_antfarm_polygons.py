@@ -40,7 +40,7 @@ from video import debug  # @UnusedImport
 default_parameters = {
     'image/remove_border': 2, #< pixels to remove around the border
     'burrow_parameters': {'ground_point_distance': 2},
-    'burrow/area_min': 5000,
+    'burrow/area_min': 1000,
     'burrow/width_typical': 30,
     'burrow/branch_length_min': 150,
     'burrow/branch_point_separation': 100,
@@ -133,7 +133,8 @@ class AntfarmShapes(object):
         self.scale_bar = self.get_scalebar_from_image(scale_mask)
 
         # find the ground line
-        ground_mask = self.isolate_color(self.image, color_ground_line, dilate=10)
+        dilate = self.params['colors/isolation_closing_radius']
+        ground_mask = self.isolate_color(self.image, color_ground_line, dilate=dilate)
         self.ground_line = self.get_groundline_from_image(ground_mask)
 
         # find all the burrows
@@ -443,7 +444,7 @@ class AntfarmShapes(object):
         # determine contours in the mask
         contours = cv2.findContours(mask, cv2.RETR_EXTERNAL,
                                     cv2.CHAIN_APPROX_SIMPLE)[1]
-
+                                    
         # iterate through the contours
         burrows = []
         for contour in contours:
@@ -472,8 +473,13 @@ class AntfarmShapes(object):
                     if max(w, h) > self.params['scale_bar/length_min']:
                         raise RuntimeError('Found something that looks like a '
                                            'scale bar')
-
-            if area > self.params['burrow/area_min']:
+                        
+            if area < self.params['burrow/area_min']:
+                # burrow is too small
+                logging.debug('Disregard burrow, because its area is too small '
+                              '(%g < %g)', area, self.params['burrow/area_min'])
+                
+            else:
                 # build polygon out of the contour points
                 burrow_poly = geometry.Polygon(points)
 
@@ -526,8 +532,9 @@ class AntfarmShapes(object):
         mask = cv2.inRange(img, bounds[:, 0], bounds[:, 1])
 
         # dilate the mask to close gaps in the outline
-        w = self.params['colors/isolation_closing_radius']
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2*w + 1, 2*w + 1))
+        w = int(self.params['colors/isolation_closing_radius'])
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,
+                                           (2*w + 1, 2*w + 1))
         mask_dilated = cv2.dilate(mask, kernel)
 
         # fill the objects
@@ -539,8 +546,9 @@ class AntfarmShapes(object):
 
         # erode the mask and return it
         if dilate != 0:
-            w = self.params['colors/isolation_closing_radius'] - dilate
-            kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2*w + 1, 2*w + 1))
+            w = int(self.params['colors/isolation_closing_radius'] - dilate)
+            kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,
+                                               (2*w + 1, 2*w + 1))
         mask = cv2.erode(mask_dilated, kernel)
 
         # make sure nothing touches the border
