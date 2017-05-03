@@ -386,7 +386,7 @@ class Analyzer(DataHandler):
             try:
                 b2_idx = burrow_track.get_burrow_index(frames[1])
             except IndexError:
-                b2_idx = len(burrow_track)
+                b2_idx = len(burrow_track) - 1
                 b2_area = burrow_track.last.area #< take the last known burrow
             else:
                 b2_area = burrow_track.burrows[b2_idx].area
@@ -401,7 +401,7 @@ class Analyzer(DataHandler):
             
             # check at what times the burrow grew
             burrow = burrow_track.burrows[b1_idx]
-            for b_idx in xrange(b1_idx + 1, b2_idx):
+            for b_idx in xrange(b1_idx + 1, b2_idx + 1):
                 burrow_next = burrow_track.burrows[b_idx]
                 
                 # check whether the burrow grew and is larger than the predug
