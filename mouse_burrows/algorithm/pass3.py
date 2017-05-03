@@ -902,6 +902,7 @@ class ThirdPass(PassBase):
         # check whether we already know this burrow
         burrows_with_mouse = []
         trail_line = geometry.LineString(self.mouse_trail)
+        
         for burrow_id, burrow in enumerate(self.burrows):
             # determine whether we are inside this burrow
             dist = burrow.polygon.distance(trail_line)
@@ -914,15 +915,17 @@ class ThirdPass(PassBase):
             self.extend_burrow_by_mouse_trail(burrow_mouse)
             
             # merge all the other burrows into this one
+            # Note that burrows_with_mouse has increasing burrow_ids
             for burrow_id in reversed(burrows_with_mouse[1:]):
+                self.logger.info('Merge burrow `%d` into `%d`', burrow_id,
+                                 burrows_with_mouse[0])
                 burrow_mouse.merge(self.burrows[burrow_id])
                 del self.burrows[burrow_id]
                 
         else:
             # create the burrow, since we don't know it yet
-            mouse_trail = geometry.LineString(self.mouse_trail)
             trail_width = self.params['burrows/width_min']
-            mouse_trail_buffered = mouse_trail.buffer(trail_width)
+            mouse_trail_buffered = trail_line.buffer(trail_width)
             contour = mouse_trail_buffered.boundary.coords
 
             burrow_mouse = Burrow(contour, centerline=self.mouse_trail)
