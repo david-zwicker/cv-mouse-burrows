@@ -391,6 +391,10 @@ PARAMETER_LIST = [
               'Determines the width of the area in which the predug is '
               'searched for. Half the width is this factor times the width of '
               'the valley defined by the ground line.'),
+    Parameter('predug/refine_shape', True, UNIT.BOOLEAN,
+              'Determines whether the predug shape should be refined using the '
+              'actual intensity values of the image. If this is not enabled, '
+              'the returned predug shape will be that of the template.' ),
     Parameter('predug/simplify_threshold', 5, UNIT.AREA_PIXEL,
               'Threshold value for simplifying the contour line of the '
               'predug.'),

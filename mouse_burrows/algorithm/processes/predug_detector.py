@@ -228,7 +228,10 @@ class PredugDetector(object):
             raise ValueError('Unknown predug location `%s`' % predug_location) 
             
         # refine the predug
-        self.predug = self._refine_predug(self.predug_rect)   
+        if self.params['predug/refine_shape']:
+            self.predug = self._refine_predug(self.predug_rect)
+        else:
+            self.predug = self.predug_rect   
         
 #         debug.show_shape(geometry.Polygon(self.predug.contour),
 #                          background=self.image)
