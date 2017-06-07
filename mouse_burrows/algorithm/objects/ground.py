@@ -39,7 +39,7 @@ class GroundProfile(object):
         if self._points[0, 0] > self._points[-1, 0]:
             self._points = self._points[::-1]
             
-        self._cache = {} #< reset the cache of the cached_property
+        self._cache_methods = {} #< reset the cache of the cached_property
         
         
     def __repr__(self):
