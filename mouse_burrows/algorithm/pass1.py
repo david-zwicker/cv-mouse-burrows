@@ -102,7 +102,7 @@ class FirstPass(PassBase):
         if self.params['cage/determine_boundaries']:
             self.video, cropping_rect = self.crop_video_to_cage(self.video)
         else:
-            cropping_rect = None
+            cropping_rect = self.video.bounds
           
         video_info = self.data['pass1/video']
         video_info['cropping_cage'] = cropping_rect
