@@ -145,7 +145,7 @@ class MouseStateConverter(object):
     def get_state_lookup_table(self, states):
         """ returns a dictionary that maps all possible mouse states onto the
         an integer. That integer gives the index in the list of supplied
-        `states` patterns supplied to this function """ 
+        `states` patterns supplied to this function """
         re_states = [re.compile(pattern) for pattern in states]
         
         possible_states = [c.symbols for c in self.categories]

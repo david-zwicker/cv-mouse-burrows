@@ -88,10 +88,11 @@ class Analyzer(DataHandler):
             frames_video[0] += adaptation_frames
             
         # get the frames that are chosen for analysis
-        frames_analysis = list(self.data['parameters/analysis/frames'])
+        frames_analysis = self.data['parameters/analysis/frames']
         if frames_analysis is None:
             frames_analysis = frames_video
         else:
+            frames_analysis = list(frames_analysis)
             if frames_analysis[0] is None:
                 frames_analysis[0] = frames_video[0]
             else:
@@ -566,6 +567,32 @@ class Analyzer(DataHandler):
             return durations
     
     
+    def get_mouse_states(self, states=None, ret_states=False):
+        """ returns the durations the mouse spends in each state before 
+        transitioning to another state
+        
+        If a list of `states` is given, only these states are included in
+        the result.
+        Transitions with a duration [in seconds] below duration_threshold will
+        not be included in the results.
+        """
+        mouse_state = self.get_mouse_track_data('states')
+
+        # set the default list of states if it not already set
+        if states is None:
+            states = self.mouse_states_default
+            
+        # cluster mouse states according to the defined states
+        lut = mouse.state_converter.get_state_lookup_table(states)
+        state_cat = [-1 if lut[state] is None else lut[state]
+                     for state in mouse_state]
+            
+        if ret_states:
+            return state_cat, states
+        else:
+            return state_cat
+            
+    
     def get_mouse_state_transitions(self, states=None, duration_threshold=0,
                                     ret_states=False):
         """ returns the durations the mouse spends in each state before 
@@ -576,20 +603,12 @@ class Analyzer(DataHandler):
         Transitions with a duration [in seconds] below duration_threshold will
         not be included in the results.
         """
-        mouse_state = self.get_mouse_track_data('state')
-
-        # set the default list of states if it not already set
-        if states is None:
-            states = self.mouse_states_default
-            
+        state_cat, states = self.get_mouse_states(states, ret_states=True)
+                    
         # add a unit to the duration threshold if it does not have any
-        if self.use_units and isinstance(duration_threshold, self.units.Quantity):
+        if self.use_units and isinstance(duration_threshold,
+                                         self.units.Quantity):
             duration_threshold /= self.units.second
-
-        # cluster mouse states according to the defined states
-        lut = mouse.state_converter.get_state_lookup_table(states)
-        state_cat = [-1 if lut[state] is None else lut[state]
-                     for state in mouse_state]
             
         # get transitions
         transitions = collections.defaultdict(list)
@@ -616,8 +635,8 @@ class Analyzer(DataHandler):
     
     def get_mouse_transition_matrices(self, ret_states=False, **kwargs):
         """ returns the matrix of transition rates between different states.
-        ret_states indicates whether a list indicating which row/column corresponds
-            to which state should also be returned. """
+        `ret_states` indicates whether a list indicating which row/column
+            corresponds to which state should also be returned. """
             
         transitions, states = self.get_mouse_state_transitions(ret_states=True,
                                                                **kwargs)
@@ -769,6 +788,22 @@ class Analyzer(DataHandler):
         plt.sca(ax)
         return ax
 
+
+    def get_mouse_ground_transitions(self):
+        """ returns the time intervals that the mouse spends under ground """
+        # identify whether the mouse is below or above ground for each frame
+        ids = self.get_mouse_states(['.[A|H|V|D].', '.[B].'])
+
+        trans = np.flatnonzero(np.diff(ids) != 0)
+        res = []
+        for i, j in zip(trans[::2], trans[1::2]):
+            assert ids[i] == 0 and ids[j] == 1
+            res.append([i, j])
+            
+        res = np.array(res) + self.get_frame_range()[0]
+        res = res * self.time_scale
+        return res
+
     
     #===========================================================================
     # GENERAL ROUTINES
@@ -892,9 +927,9 @@ class Analyzer(DataHandler):
 
         # save the time slices used for analysis
         result = {'frame_interval': frame_ivals,
-                  'period_start': [a*self.time_scale for a, _ in frame_ivals],
-                  'period_end': [b*self.time_scale for _, b in frame_ivals],
-                  'period_duration': [(b - a)*self.time_scale 
+                  'period_start': [a * self.time_scale for a, _ in frame_ivals],
+                  'period_end': [b * self.time_scale for _, b in frame_ivals],
+                  'period_duration': [(b - a) * self.time_scale 
                                       for a, b in frame_ivals]}
 
         # get the area changes of the ground line
