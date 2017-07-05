@@ -794,12 +794,24 @@ class Analyzer(DataHandler):
         # identify whether the mouse is below or above ground for each frame
         ids = self.get_mouse_states(['.[A|H|V|D].', '.[B].'])
 
-        trans = np.flatnonzero(np.diff(ids) != 0)
-        res = []
-        for i, j in zip(trans[::2], trans[1::2]):
-            assert ids[i] == 0 and ids[j] == 1
-            res.append([i, j])
+        trans = iter(np.flatnonzero(np.diff(ids) != 0))
+        res, start = [], None
+        for t in trans:
+            if start is None:
+                # we currently believe the mouse is above ground
+                if ids[t] == 0:
+                    start = t  # save time when mouse went underground
+            else:
+                # we currently believe the mouse is below ground
+                if ids[t] == 0 and ids[t - 1] == 1:
+                    # mouse went below ground => update start time
+                    start = t
+                elif ids[t] == 1:
+                    # mouse went above ground => add segment to list
+                    res.append((start, t))
+                    start = None 
             
+        # convert to actual times
         res = np.array(res) + self.get_frame_range()[0]
         res = res * self.time_scale
         return res
