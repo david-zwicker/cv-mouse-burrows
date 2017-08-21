@@ -286,6 +286,11 @@ class AntfarmShapes(object):
                 if line is not None:
                     burrow.branches.append(line)
 
+        # fix the centerline in certain cases
+        if len(burrow.centerline) < 2:
+            if len(burrow.endpoints) == 2:
+                burrow.centerline = [[e.x, e.y] for e in burrow.endpoints]
+
         if ground_line:
             self._add_burrow_angle_statistics(burrow, ground_line)
 
