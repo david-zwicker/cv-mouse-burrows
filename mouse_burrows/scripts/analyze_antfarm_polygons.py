@@ -60,6 +60,7 @@ default_parameters = {
 }
 
 
+
 ScaleBar = collections.namedtuple('ScaleBar', ['size', 'angle'])
 
 
@@ -96,7 +97,7 @@ class AntfarmShapes(object):
         name, ext = os.path.splitext(filename)
         ext = ext.lower()
 
-        obj = cls(None, name=name, **kwargs)
+        obj = cls(name=name, **kwargs)
 
         # determine which loader to use for the individual files
         if ext == '.jpg' or ext == '.png':
@@ -728,7 +729,8 @@ class AntfarmShapes(object):
 
 
 def process_polygon_file(path, output_folder=None, suppress_exceptions=False,
-                         debug=False):
+                         debug=False, 
+                         scale=default_parameters['scale_bar/length_cm']):
     """ process a single shape file given by path """
     if suppress_exceptions:
         # run the function within a catch-all try-except-block
@@ -746,7 +748,8 @@ def process_polygon_file(path, output_folder=None, suppress_exceptions=False,
         logging.info('Analyzing file `%s`' % path)
 
         # load from image
-        pc = AntfarmShapes.load_from_file(path)
+        parameters = {'scale_bar/length_cm': scale}
+        pc = AntfarmShapes.load_from_file(path, parameters=parameters)
 
         if output_folder:
             output_file = os.path.join(output_folder, pc.filename)
@@ -778,6 +781,9 @@ def main():
                         help='python pickle file from which data is loaded')
     parser.add_argument('-f', '--folder', dest='folder', type=str,
                         help='folder where output images will be written to')
+    parser.add_argument('--scale', dest='scale', type=float,
+                        default=default_parameters['scale_bar/length_cm'],
+                        help='length of the scale bar in cm')
     flags = parser.add_mutually_exclusive_group(required=False)
     flags.add_argument('-m', '--multi-processing', dest='multiprocessing',
                         action='store_true', help='turns on multiprocessing')
@@ -811,7 +817,8 @@ def main():
             # use multiple processes to analyze data
             job_func = functools.partial(process_polygon_file,
                                          output_folder=args.folder,
-                                         suppress_exceptions=True)
+                                         suppress_exceptions=True,
+                                         scale=args.scale)
             pool = mp.Pool()
             results = pool.map(job_func, files)
 
@@ -820,7 +827,7 @@ def main():
             job_func = functools.partial(process_polygon_file,
                                          output_folder=args.folder,
                                          suppress_exceptions=False,
-                                         debug=args.debug)
+                                         debug=args.debug, scale=args.scale)
             results = map(job_func, files)
 
         # filter results
