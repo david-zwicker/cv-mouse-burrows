@@ -31,7 +31,7 @@ sys.path.append(project_path)
 
 from mouse_burrows.algorithm.objects import Burrow, GroundProfile
 from video.analysis import curves, image, regions, shapes
-from utils import data_structures, math
+from utils import data_structures, math, misc
 from utils.files import ensure_directory_exists
 
 from video import debug  # @UnusedImport
@@ -833,7 +833,11 @@ def main():
                                          output_folder=args.folder,
                                          suppress_exceptions=False,
                                          debug=args.debug, scale=args.scale)
-            results = map(job_func, files)
+            
+            # iterate over all files
+            results = []
+            for path in misc.display_progress(files):
+                results.append(job_func(path))
 
         # filter results
         results = [res for res in results if res is not None]
@@ -851,7 +855,8 @@ def main():
         for data in results:
             if data:
                 # sort the burrows from left to right
-                burrows = sorted(data['burrows'], key=operator.itemgetter('pos_x'))
+                burrows = sorted(data['burrows'],
+                                 key=operator.itemgetter('pos_x'))
                 # create a single row per burrow
                 for burrow_id, properties in enumerate(burrows, 1):
                     properties['burrow_id'] = burrow_id
